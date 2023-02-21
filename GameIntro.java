@@ -1,15 +1,19 @@
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
 
 public class GameIntro {
 
     private int numUsers;
-    private ArrayList<String> userNames = new ArrayList<>();
-    private ArrayList<String> orderedPlayers = new ArrayList<>();
+    private String starterTile;
+    private String habitatTile;
+    private String wildlifeToken;
+
+    ArrayList<Tile> starterTiles = new ArrayList<>();
+    ArrayList<User> users = new ArrayList<>(4);
+    Tile [] fourTiles = new Tile[4];
+    String [] fourTokens = new String[4];
     private static final Random rng = new Random () ;
+
+
     public void getUsers() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the number of players (2-4)");
@@ -23,17 +27,70 @@ public class GameIntro {
 
         for (int i = 1; i < numUsers+1; i++) {
             System.out.println("Please enter the name of player " + i + ":");
-            userNames.add(scanner1.nextLine());
+            Tile [] tempTiles = new Tile[30];
+            tempTiles[i] = starterTiles.get(rng.nextInt(5));
+            User tempUser = new User(scanner1.nextLine(), tempTiles);
+            users.add(tempUser);
         }
 
         System.out.println("There are " + numUsers + " players\nThey will play in the following order:");
 
-        Collections.shuffle(userNames);
+        Collections.shuffle(users);
         for (int i = 0; i < numUsers; i++) {
-            System.out.println(userNames.get(i));
+            System.out.println(users.get(i).name);
         }
 
     }
+
+    public void getStarterTile(Tile [] starterTiles) {
+        for (int i = 0; i < users.size(); i++) {
+            users.get(i).tiles[i] = starterTiles[rng.nextInt(5)+1];
+        }
+    }
+
+    public void getTilesTokens() {
+        for (int i = 0; i < fourTiles.length; i++) {
+            fourTiles[i] = Tile.tiles.get(rng.nextInt());
+            fourTokens[i] = Token.wildlifeTokens.get(rng.nextInt());
+        }
+        if (cullRequired()) {
+            System.out.println("All four tokens are the same. Therefore all tokens must be replaced");
+        }
+    }
+
+    public boolean cullRequired() {
+        String temp = fourTokens[0];
+        int x = 1;
+        for (int i = 1; i < 4; i++) {
+            if (Objects.equals(fourTokens[i], temp)) {
+                x++;
+            }
+        }
+        if (x == 3) {
+            System.out.println("Three of the tokens are the same, if you wish to cull enter 'yes'. If not enter 'no'");
+            Scanner scanner = new Scanner(System.in);
+            String userChoice = scanner.nextLine();
+            if (userChoice.equalsIgnoreCase("yes"))
+                return true;
+            else if (userChoice.equalsIgnoreCase("no")) {
+                return false;
+            }
+            else {
+                throw new IllegalArgumentException("Incorrect entry");
+            }
+        }
+        else return x == 4;
+    }
+
+    public void useCull() {
+        getTilesTokens();
+        if (cullRequired()) {
+            getTilesTokens();
+            System.out.println("The four tokens have been replaced");
+        }
+    }
+
+
 
     public static void main(String[] args) {
         GameIntro g = new GameIntro();
