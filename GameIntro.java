@@ -89,6 +89,30 @@ public class GameIntro {
             System.out.println("The four tokens have been replaced");
         }
     }
+        public  void NextTurn(ArrayList<User> order, User currentPlayer){
+        for(int i = 0;i < order.size();i++){
+            if(currentPlayer == order.get(order.size() - 1)){
+                currentPlayer = order.get(0);
+                break;
+            }
+            else if(currentPlayer == order.get(i) && currentPlayer != order.get(order.size() - 1)){
+                currentPlayer = order.get(i + 1);
+                break;
+            }
+
+
+        }
+
+        theGame(order,currentPlayer);
+    }
+    public void theGame(ArrayList<User> order, User currentPlayer){
+        System.out.println(currentPlayer +", it is your turn.");
+        Scanner input = new Scanner(System.in);
+        System.out.println("Input anything");
+        String irrelvant = input.nextLine();
+        System.out.println(currentPlayer + ", your turn is over.");
+        NextTurn(order, currentPlayer);
+    }
 
 
 
