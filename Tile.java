@@ -7,6 +7,8 @@ public class Tile {
     private static ArrayList<String> habitats = new ArrayList<>(); // 5 different habitats
     private ArrayList<String> tileWildlife; // wildlife on tile
     private static ArrayList<String> wildlife = new ArrayList<>();
+
+    public static ArrayList<ArrayList<String>> allTiles = new ArrayList<>();
     private boolean hasToken;
     public static ArrayList<Tile> tiles = new ArrayList<>();
     private String habitatTopBar;
@@ -149,18 +151,23 @@ public class Tile {
                 throw new IllegalArgumentException("Unknown habitat");
             }
         }
+        ArrayList<String> theTile = new ArrayList<>();
 
-        System.out.println(habitatTopBar);
-        System.out.println(habitatLeftSide + "\t" + this.tileWildlife.get(0) + "\t" +
+        theTile.add(habitatTopBar);
+        theTile.add(habitatLeftSide + "\t" + this.tileWildlife.get(0) + "\t" +
                 (this.tileWildlife.size() > 1 ? this.tileWildlife.get(1): " ") + " " + habitatRightSide);
         if (this.tileHabitats.size() == 1)
-            System.out.println(habitatLeftSide + (this.tileWildlife.size()>2 ? this.tileWildlife.get(2): " ") + "\t\tK " + habitatRightSide);
+            theTile.add(habitatLeftSide + (this.tileWildlife.size()>2 ? this.tileWildlife.get(2): " ") + "\t\tK " + habitatRightSide);
         else {
-            System.out.println(habitatLeftSide + "\t" + (this.tileWildlife.size()>2 ? this.tileWildlife.get(2): " ") + "\t  " + habitatRightSide);
+            theTile.add(habitatLeftSide + "\t" + (this.tileWildlife.size()>2 ? this.tileWildlife.get(2): " ") + "\t  " + habitatRightSide);
         }
-        System.out.print(habitatBottomBar);
+        theTile.add(habitatBottomBar);
+        allTiles.add(theTile);
+
+
+
     }
-    
+
 
     @Override
     public String toString() {
