@@ -8,7 +8,8 @@ public class GameIntro {
     private String wildlifeToken;
 
     ArrayList<Tile> starterTiles = new ArrayList<>();
-    ArrayList<User> users = new ArrayList<>(4);
+    static ArrayList<User> users = new ArrayList<>(4);
+    static User currentPlayer;
     Tile [] fourTiles = new Tile[4];
     String [] fourTokens = new String[4];
     private static final Random rng = new Random () ;
@@ -28,7 +29,7 @@ public class GameIntro {
         for (int i = 1; i < numUsers+1; i++) {
             System.out.println("Please enter the name of player " + i + ":");
             Tile [] tempTiles = new Tile[30];
-            tempTiles[i] = starterTiles.get(rng.nextInt(5));
+//            tempTiles[i] = starterTiles.get(rng.nextInt(5));
             User tempUser = new User(scanner1.nextLine(), tempTiles);
             users.add(tempUser);
         }
@@ -39,7 +40,12 @@ public class GameIntro {
         for (int i = 0; i < numUsers; i++) {
             System.out.println(users.get(i).name);
         }
-
+        currentPlayer = users.get(0);
+        for(int i = 0;i <numUsers;i++){
+            users.get(i).getBoard().fillBoard();
+        }
+        currentPlayer.getBoard().showBoard(0);
+        currentPlayer.getBoard().placeTile();
     }
 
     public void getStarterTile(Tile [] starterTiles) {
@@ -89,31 +95,25 @@ public class GameIntro {
             System.out.println("The four tokens have been replaced");
         }
     }
-        public  void NextTurn(ArrayList<User> order, User currentPlayer){
-        for(int i = 0;i < order.size();i++){
-            if(currentPlayer == order.get(order.size() - 1)){
-                currentPlayer = order.get(0);
+    public static void NextTurn(){
+        for(int i = 0;i < users.size();i++){
+            if(currentPlayer == users.get(users.size() - 1)){
+                currentPlayer = users.get(0);
+                System.out.println("\t\t\t\t\t\t\t" + currentPlayer.getName() +", it is your turn!");
                 break;
             }
-            else if(currentPlayer == order.get(i) && currentPlayer != order.get(order.size() - 1)){
-                currentPlayer = order.get(i + 1);
+            else if(currentPlayer == users.get(i) && currentPlayer != users.get(users.size() - 1)){
+                currentPlayer = users.get(i + 1);
+            System.out.println("\t\t\t\t\t\t\t"+ currentPlayer.getName() +", it is your turn!");
                 break;
             }
 
 
         }
 
-        theGame(order,currentPlayer);
+        currentPlayer.getBoard().showBoard(0);
+        currentPlayer.getBoard().placeTile();
     }
-    public void theGame(ArrayList<User> order, User currentPlayer){
-        System.out.println(currentPlayer +", it is your turn.");
-        Scanner input = new Scanner(System.in);
-        System.out.println("Input anything");
-        String irrelvant = input.nextLine();
-        System.out.println(currentPlayer + ", your turn is over.");
-        NextTurn(order, currentPlayer);
-    }
-
 
 
     public static void main(String[] args) {
