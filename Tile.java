@@ -3,12 +3,17 @@ import java.util.Random;
 import java.util.ArrayList;
 
 public class Tile {
+    public static ArrayList<String> EmptyTile =new ArrayList<>();
     private ArrayList<String> tileHabitats; // habitats on tile
     private static ArrayList<String> habitats = new ArrayList<>(); // 5 different habitats
     private ArrayList<String> tileWildlife; // wildlife on tile
     private static ArrayList<String> wildlife = new ArrayList<>();
 
-    public static ArrayList<ArrayList<String>> allTiles = new ArrayList<>();
+    public static ArrayList<ArrayList<String>> allTiles = new ArrayList<>(50);
+    public static ArrayList<String> topBar = new ArrayList<>(50);
+    public static ArrayList<String> topMiddle = new ArrayList<>(50);
+    public static ArrayList<String> bottomMiddle = new ArrayList<>(50);
+    public static ArrayList<String> bottomBar = new ArrayList<>(50);
     private boolean hasToken;
     public static ArrayList<Tile> tiles = new ArrayList<>();
     private String habitatTopBar;
@@ -51,7 +56,9 @@ public class Tile {
         this.tileHabitats = habitats;
         this.tileWildlife = wildlife;
         this.hasToken = hasToken;
+
     }
+
 
     public static Tile generateTile() {
         habitatArray();
@@ -98,7 +105,7 @@ public class Tile {
         }
     }
 
-    public void TileDisplay() {
+    public ArrayList<String> TileDisplay() {
 
         if (this.tileHabitats.get(0).equalsIgnoreCase("prairie")) {
             habitatTopBar = TileColours.PRAIRIE_BAR;
@@ -162,12 +169,34 @@ public class Tile {
             theTile.add(habitatLeftSide + "\t" + (this.tileWildlife.size()>2 ? this.tileWildlife.get(2): " ") + "\t  " + habitatRightSide);
         }
         theTile.add(habitatBottomBar);
-        allTiles.add(theTile);
+//        allTiles.add(theTile);
+
+        return theTile;
 
 
-
+//        for(String s: theTile){
+//            System.out.println(s);
+//        }
+//
     }
-
+    public void rotateTile(){
+        ArrayList<String> tile = Tile.generateTile().TileDisplay();
+        for(int i = 0;i < 4; i++){
+            System.out.println(tile.get(i));
+        }
+        System.out.println();
+       String habitat1 = tile.get(0);
+       String habitat2 = tile.get(3);
+       String bar1 = tile.get(1);
+       String bar2 = tile.get(2);
+       tile.set(0, habitat2);
+       tile.set(3,habitat1);
+       tile.set(1,bar2);
+       tile.set(2,bar1);
+        for(int i = 0;i < 4; i++){
+            System.out.println(tile.get(i));
+        }
+    }
 
     @Override
     public String toString() {
@@ -175,7 +204,8 @@ public class Tile {
     }
 
     public static void main(String[] args) {
-        Tile tile = generateTile();
-        tile.TileDisplay();
+       Tile a = Tile.generateTile();
+
+       a.rotateTile();
     }
 }
