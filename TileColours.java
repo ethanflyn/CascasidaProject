@@ -10,7 +10,8 @@ public class TileColours {
     public static final String RIVER_SIDE = "\u001B[44m" + "  " + "\u001B[0m";
     public static final String MOUNTAIN_BAR = "\u001B[100m" + "\t\t\t" + "\u001B[0m";
     public static final String MOUNTAIN_SIDE = "\u001B[100m" + "  " + "\u001B[0m";
-    public static final String EMPTY_TILE_SIDE= "\u001B[99m\t\t\t\u001B[99m";
+    public static final String EMPTY_TILE_BAR= "\u001B[40m" + "\t\t\t" + "\u001B[0m";
+    public static final String EMPTY_TILE_SIDE ="\u001B[40m"+ "  " + "\u001B[0m";
 
    
 
