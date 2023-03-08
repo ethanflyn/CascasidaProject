@@ -28,6 +28,7 @@ public class Token {
             presentTokens.add(wildlifeTokens.get(m));
             wildlifeTokens.remove(m--);
         }
+        System.out.print("\t\t\t\t\t\t");
         for (int i = 0; i < 4; i++) {
             System.out.print("     " + Token.presentTokens.get(i) + "\t\t\t");
         }
