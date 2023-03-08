@@ -37,8 +37,18 @@ public class Culling {
                             Token.wildlifeTokens.add(Token.presentTokens.get(i));
                             Token.presentTokens.remove(i--);
                         }
+                        i++;
                     }
                 }
+                for (i = 0; i < 4; i++) {
+                    System.out.print("\t\t\t\t\t\t");
+                    for (int j = 0; j < 4; j++) {
+                        System.out.print(Tile.presentTiles.get(j).get(i));
+                        System.out.print("\t");
+                    }
+                    System.out.println();
+                }
+                System.out.println();
                 Token.playableTokens();
                 System.out.println("Tokens have been replaced");
             }
@@ -52,6 +62,15 @@ public class Culling {
                 Token.wildlifeTokens.add(Token.presentTokens.get(i));
                 Token.presentTokens.remove(i--);
             }
+            for (i = 0; i < 4; i++) {
+                System.out.print("\t\t\t\t\t\t");
+                for (int j = 0; j < 4; j++) {
+                    System.out.print(Tile.presentTiles.get(j).get(i));
+                    System.out.print("\t");
+                }
+                System.out.println();
+            }
+            System.out.println();
             Token.playableTokens();
         }
     }
