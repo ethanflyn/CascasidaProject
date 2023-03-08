@@ -10,10 +10,6 @@ public class Tile {
     private static ArrayList<String> wildlife = new ArrayList<>(); // 5 different wildlife
     private static ArrayList<ArrayList<String>> presentTiles = new ArrayList<>(); // 4 playable tiles in middle of board
     public static ArrayList<ArrayList<String>> allTiles = new ArrayList<>(50); // stack of all tiles
-    public static ArrayList<String> topBar = new ArrayList<>(50);
-    public static ArrayList<String> topMiddle = new ArrayList<>(50);
-    public static ArrayList<String> bottomMiddle = new ArrayList<>(50);
-    public static ArrayList<String> bottomBar = new ArrayList<>(50);
     private boolean hasToken;
     public static ArrayList<Tile> tiles = new ArrayList<>();
     private String habitatTopBar;
@@ -33,8 +29,6 @@ public class Tile {
         habitats.add(f);
         String w = "wetland";
         habitats.add(w);
-
-        Collections.shuffle(habitats);
     }
 
     public static void wildlifeArray() {
@@ -48,8 +42,6 @@ public class Tile {
         wildlife.add(Elk);
         String Salmon = "S";
         wildlife.add(Salmon);
-
-        Collections.shuffle(wildlife);
     }
 
     public Tile(ArrayList<String> habitats, ArrayList<String> wildlife, boolean hasToken) {
@@ -61,8 +53,8 @@ public class Tile {
 
 
     public static Tile generateTile() {
-        habitatArray();
-        wildlifeArray();
+        Collections.shuffle(habitats);
+        Collections.shuffle(wildlife);
         int x = rng.nextInt(3)+1;
         ArrayList<String> tempWildlife = new ArrayList<>();
         for (int i = 0; i < x; i++) {
@@ -196,6 +188,7 @@ public class Tile {
         }
 
         for (int i = 0; i < 4; i++) {
+            System.out.print("\t\t\t\t\t\t");
             for (int j = 0; j < 4; j++) {
                 System.out.print(presentTiles.get(j).get(i));
                 System.out.print("\t");
@@ -232,6 +225,8 @@ public class Tile {
     }
 
     public static void main(String[] args) {
+        habitatArray();
+        wildlifeArray();
         Token.generateTokens();
         tileBag();
         playableTiles();
