@@ -45,9 +45,11 @@ public class GameIntro {
             users.get(i).getBoard().fillBoard();
         }
         currentPlayer.getBoard().showBoard(0);
-        currentPlayer.getBoard().placeTile();
+        Tile.tileBag();
+        Token.generateTokens();
+        Tile.playableTiles();
+        currentPlayer.getBoard().chooseTile();
     }
-
     public static void NextTurn(){
         for(int i = 0;i < users.size();i++){
             if(currentPlayer == users.get(users.size() - 1)){
@@ -60,16 +62,17 @@ public class GameIntro {
             System.out.println("\t\t\t\t\t\t\t"+ currentPlayer.getName() +", it is your turn!");
                 break;
             }
+
+
         }
 
         currentPlayer.getBoard().showBoard(0);
-        currentPlayer.getBoard().placeTile();
+        Tile.playableTiles();
+        currentPlayer.getBoard().chooseTile();
     }
 
 
     public static void main(String[] args) {
-        Tile.habitatArray();
-        Tile.wildlifeArray();
         GameIntro g = new GameIntro();
         g.getUsers();
     }
