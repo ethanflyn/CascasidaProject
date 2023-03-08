@@ -48,53 +48,6 @@ public class GameIntro {
         currentPlayer.getBoard().placeTile();
     }
 
-    public void getStarterTile(Tile [] starterTiles) {
-        for (int i = 0; i < users.size(); i++) {
-            users.get(i).tiles[i] = starterTiles[rng.nextInt(5)+1];
-        }
-    }
-
-    public void getTilesTokens() {
-        for (int i = 0; i < fourTiles.length; i++) {
-            fourTiles[i] = Tile.tiles.get(rng.nextInt());
-            fourTokens[i] = Token.wildlifeTokens.get(rng.nextInt());
-        }
-        if (cullRequired()) {
-            System.out.println("All four tokens are the same. Therefore all tokens must be replaced");
-        }
-    }
-
-    public boolean cullRequired() {
-        String temp = fourTokens[0];
-        int x = 1;
-        for (int i = 1; i < 4; i++) {
-            if (Objects.equals(fourTokens[i], temp)) {
-                x++;
-            }
-        }
-        if (x == 3) {
-            System.out.println("Three of the tokens are the same, if you wish to cull enter 'yes'. If not enter 'no'");
-            Scanner scanner = new Scanner(System.in);
-            String userChoice = scanner.nextLine();
-            if (userChoice.equalsIgnoreCase("yes"))
-                return true;
-            else if (userChoice.equalsIgnoreCase("no")) {
-                return false;
-            }
-            else {
-                throw new IllegalArgumentException("Incorrect entry");
-            }
-        }
-        else return x == 4;
-    }
-
-    public void useCull() {
-        getTilesTokens();
-        if (cullRequired()) {
-            getTilesTokens();
-            System.out.println("The four tokens have been replaced");
-        }
-    }
     public static void NextTurn(){
         for(int i = 0;i < users.size();i++){
             if(currentPlayer == users.get(users.size() - 1)){
@@ -107,8 +60,6 @@ public class GameIntro {
             System.out.println("\t\t\t\t\t\t\t"+ currentPlayer.getName() +", it is your turn!");
                 break;
             }
-
-
         }
 
         currentPlayer.getBoard().showBoard(0);
@@ -117,6 +68,8 @@ public class GameIntro {
 
 
     public static void main(String[] args) {
+        Tile.habitatArray();
+        Tile.wildlifeArray();
         GameIntro g = new GameIntro();
         g.getUsers();
     }
