@@ -2,14 +2,16 @@ import java.util.Collections;
 import java.util.Random;
 import java.util.ArrayList;
 
+import static java.lang.System.exit;
+
 public class Tile {
     public static ArrayList<String> EmptyTile =new ArrayList<>();
     private ArrayList<String> tileHabitats; // habitats on tile
     private static ArrayList<String> habitats = new ArrayList<>(); // 5 different habitats
     private ArrayList<String> tileWildlife; // wildlife on tile
     private static ArrayList<String> wildlife = new ArrayList<>(); // 5 different wildlife
-    private static ArrayList<ArrayList<String>> presentTiles = new ArrayList<>(); // 4 playable tiles in middle of board
-    public static ArrayList<ArrayList<String>> allTiles = new ArrayList<>(50); // stack of all tiles
+    public static ArrayList<ArrayList<String>> presentTiles = new ArrayList<>(); // 4 playable tiles in middle of board
+    public static ArrayList<ArrayList<String>> allTiles = new ArrayList<>(); // stack of all tiles
     private boolean hasToken;
     public static ArrayList<Tile> tiles = new ArrayList<>();
     private String habitatTopBar;
@@ -50,7 +52,6 @@ public class Tile {
         this.hasToken = hasToken;
 
     }
-
 
     public static Tile generateTile() {
         Collections.shuffle(habitats);
@@ -164,18 +165,31 @@ public class Tile {
 //        allTiles.add(theTile);
 
         return theTile;
-
-
-//        for(String s: theTile){
-//            System.out.println(s);
-//        }
 //
     }
     
     public static void tileBag() {
-        for (int i = 0; i < 85; i++) {
-            Tile temp = generateTile();
-            allTiles.add(temp.TileDisplay());
+        switch (GameIntro.users.size()) {
+            case 4:
+                for (int i = 0; i < 83; i++) {
+                    Tile temp = generateTile();
+                    allTiles.add(temp.TileDisplay());
+                }
+                break;
+            case 3:
+                for (int i = 0; i < 63; i++) {
+                    Tile temp = generateTile();
+                    allTiles.add(temp.TileDisplay());
+                }
+                break;
+            case 2:
+                for (int i = 0; i < 43; i++) {
+                    Tile temp = generateTile();
+                    allTiles.add(temp.TileDisplay());
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("Illegal number of users");
         }
     }
 
@@ -200,6 +214,15 @@ public class Tile {
         Token.playableTokens();
 
     }
+
+    public static void replaceTile(int index) {
+        presentTiles.remove(index);
+        Collections.shuffle(allTiles);
+        presentTiles.add(allTiles.get(0));
+        allTiles.remove(0);
+        Collections.shuffle(allTiles);
+    }
+
     public void rotateTile(){
         ArrayList<String> tile = Tile.generateTile().TileDisplay();
         for(int i = 0;i < 4; i++){
