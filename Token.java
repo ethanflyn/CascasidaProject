@@ -36,4 +36,15 @@ public class Token {
         Culling.cullRequired();
 
     }
+
+    public static void replaceToken(int index) {
+        presentTokens.remove(index);
+        Collections.shuffle(wildlifeTokens);
+        presentTokens.add(wildlifeTokens.get(0));
+        wildlifeTokens.remove(0);
+        Collections.shuffle(wildlifeTokens);
+    }
+
+
 }
+
