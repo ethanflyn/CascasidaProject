@@ -10,8 +10,6 @@ public class GameIntro {
     ArrayList<Tile> starterTiles = new ArrayList<>();
     static ArrayList<User> users = new ArrayList<>(4);
     static User currentPlayer;
-    Tile [] fourTiles = new Tile[4];
-    String [] fourTokens = new String[4];
     private static final Random rng = new Random () ;
 
 
@@ -49,8 +47,13 @@ public class GameIntro {
         Token.generateTokens();
         Tile.playableTiles();
         currentPlayer.getBoard().chooseTile();
+        currentPlayer.getBoard().chooseToken();
     }
     public static void NextTurn(){
+        if (Tile.allTiles.size() < 1) {
+            System.out.println("There are no more tiles in the bag. The game is over");
+            return;
+        }
         for(int i = 0;i < users.size();i++){
             if(currentPlayer == users.get(users.size() - 1)){
                 currentPlayer = users.get(0);
@@ -59,7 +62,7 @@ public class GameIntro {
             }
             else if(currentPlayer == users.get(i) && currentPlayer != users.get(users.size() - 1)){
                 currentPlayer = users.get(i + 1);
-            System.out.println("\t\t\t\t\t\t\t"+ currentPlayer.getName() +", it is your turn!");
+                System.out.println("\t\t\t\t\t\t\t"+ currentPlayer.getName() +", it is your turn!");
                 break;
             }
 
@@ -69,10 +72,15 @@ public class GameIntro {
         currentPlayer.getBoard().showBoard(0);
         Tile.playableTiles();
         currentPlayer.getBoard().chooseTile();
+        currentPlayer.getBoard().chooseToken();
     }
 
 
+
+
     public static void main(String[] args) {
+        Tile.habitatArray();
+        Tile.wildlifeArray();
         GameIntro g = new GameIntro();
         g.getUsers();
     }
