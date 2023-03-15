@@ -9,8 +9,10 @@ public class Board {
 
     private static int counter = 0;
 
-    ArrayList<ArrayList<String>> myTiles = new ArrayList<>();
+    public ArrayList<ArrayList<String>> myTiles = new ArrayList<>();
     ArrayList<String> chosenTile = new ArrayList<>();
+    public static String chosenToken;
+    public static int selection;
 
     public Board() {
 
@@ -40,7 +42,7 @@ public class Board {
         int position = Integer.parseInt(input2);
 
         if (this.myTiles.get(position + 1) == Tile.EmptyTile && this.myTiles.get(position - 1) == Tile.EmptyTile && this.myTiles.get(position + 10) == Tile.EmptyTile && this.myTiles.get(position - 10) == Tile.EmptyTile) {
-            System.out.println("\t\t\t\t\t\t\tThere is no adjacent Tiless!!!!");
+            System.out.println("\t\t\t\t\t\t\tThere is no adjacent Tiles!!!!");
             placeTile(tile);
         }
         if (this.myTiles.get(position) != Tile.EmptyTile) {
@@ -52,18 +54,19 @@ public class Board {
 
         showBoard(0);
         System.out.println("\n\n");
-        GameIntro.NextTurn();
     }
 
     public void chooseTile(){
         System.out.println("Please enter a number between 1-4 to choose which tile you would like to place!");
         Scanner a = new Scanner(System.in);
-        int input = a.nextInt();
-        if(input > 4 || input < 0){
+        selection = a.nextInt();
+
+        if(selection > 4 || selection < 0){
             System.out.println("Invalid input");
             chooseTile();
         }
-         chosenTile = Tile.presentTiles.get(input - 1);
+        chosenTile = Tile.presentTiles.get(selection - 1);
+        Tile.replaceTile(selection-1);
 
         rotateTile(chosenTile);
     }
@@ -72,32 +75,95 @@ public class Board {
         System.out.println("Would you like to rotate your tile?\nEnter 'yes' or 'no'");
         Scanner a = new Scanner(System.in);
         String input = a.nextLine();
-    if(input.equals("no") ){
-        placeTile(tile);
-    }
-    else if(input.equals("yes")){
-        String habitat1 = tile.get(0);
-        String habitat2 = tile.get(3);
-        String bar1 = tile.get(1);
-        String bar2 = tile.get(2);
-        tile.set(0, habitat2);
-        tile.set(3,habitat1);
-        tile.set(1,bar2);
-        tile.set(2,bar1);
-        for(int i = 0;i < 4; i++){
-            System.out.println(tile.get(i));
+        if(input.equalsIgnoreCase("no") ){
+            placeTile(tile);
+        }
+        else if(input.equalsIgnoreCase("yes")){
+            String habitat1 = tile.get(0);
+            String habitat2 = tile.get(3);
+            String bar1 = tile.get(1);
+            String bar2 = tile.get(2);
+            tile.set(0, habitat2);
+            tile.set(3,habitat1);
+            tile.set(1,bar2);
+            tile.set(2,bar1);
+            for(int i = 0;i < 4; i++){
+                System.out.println(tile.get(i));
+            }
+
+            placeTile(tile);
+        }
+        else{
+            System.out.println("Invalid input");
+            rotateTile(tile);
         }
 
-        placeTile(tile);
-    }
-    else{
-        System.out.println("Invalid input");
-        rotateTile(tile);
     }
 
+    public void chooseToken() {
+        boolean canPlace = false;
+        chosenToken = Token.presentTokens.get(selection);
+        for (ArrayList<String> myTile : myTiles) {
+            if (myTile.get(1).contains(chosenToken) || myTile.get(2).contains(chosenToken)) {
+                canPlace = true;
+                break;
+            }
+        }
+        if (canPlace) {
+            System.out.println("Do you want to place the token? " + chosenToken);
+            Scanner scanner = new Scanner(System.in);
+            String in = scanner.nextLine();
+            if (in.equalsIgnoreCase("yes")) {
+                Token.replaceToken(selection);
+                placeToken(chosenToken);
+            } else {
+                System.out.println("No token has been placed");
+                System.out.println("\n\n");
+                GameIntro.NextTurn();
+            }
+        } else {
+            System.out.println("You cannot place this token");
+            System.out.println("\n\n");
+            GameIntro.NextTurn();
+        }
+    }
 
+    public void placeToken(String token) {
+        System.out.println("TOKEN PLACEMENT\nPlease enter the X coordinate where you want to place the token\n");
+        Scanner a = new Scanner(System.in);
+        String input = a.nextLine();
+        int x = Integer.parseInt(input);
+        if (x < 0 || x > 9) {
+            System.out.println("\t\t\t\t\t\t\tInvalid input!!!!");
+            placeToken(token);
+        }
+        System.out.println("\t\t\t\t\t\t\tPlease enter the Y coordinate where you want to place the token");
+        Scanner b = new Scanner(System.in);
+        String input2 = b.nextLine();
+        int y = Integer.parseInt(input2);
+        if (y < 0 || y > 9) {
+            System.out.println("\t\t\t\t\t\t\tInvalid input!!!!");
+            placeToken(token);
+        }
 
+        input2 += input;
+        int position = Integer.parseInt(input2);
 
+        if (this.myTiles.get(position) == Tile.EmptyTile) {
+            System.out.println("\t\t\t\t\t\t\tThere is no tile placed here!!!!");
+            placeToken(token);
+        }
+
+        if (!this.myTiles.get(position).get(1).contains(chosenToken) && !this.myTiles.get(position).get(2).contains(chosenToken)) {
+            System.out.println("\t\t\t\t\t\t\tThis token cannot be placed here");
+            placeToken(token);
+        }
+
+        if (this.myTiles.get(position).get(1).contains(chosenToken))
+            this.myTiles.get(position).set(1, this.myTiles.get(position).get(1).replace(chosenToken, "\u001B[31m" + chosenToken + "\u001B[0m")) ;
+        System.out.println("you have placed the token");
+        System.out.println("\n\n");
+        GameIntro.NextTurn();
     }
 
     public void placeStarterTile() {
@@ -105,9 +171,9 @@ public class Board {
         Tile b = Tile.generateTile();
         Tile c = Tile.generateTile();
 
-        this.myTiles.set(45, a.TileDisplay());
-        this.myTiles.set(55, b.TileDisplay());
-        this.myTiles.set(56, c.TileDisplay());
+        this.myTiles.set(44, a.TileDisplay());
+        this.myTiles.set(54, b.TileDisplay());
+        this.myTiles.set(55, c.TileDisplay());
 
     }
 
@@ -120,8 +186,8 @@ public class Board {
 
 
         Tile.EmptyTile.add(TileColours.EMPTY_TILE_BAR);
-        Tile.EmptyTile.add(TileColours.EMPTY_TILE_SIDE + "        " + TileColours.EMPTY_TILE_SIDE);
-        Tile.EmptyTile.add(TileColours.EMPTY_TILE_SIDE + "        " + TileColours.EMPTY_TILE_SIDE);
+        Tile.EmptyTile.add(TileColours.EMPTY_TILE_SIDE + "\t\t " + TileColours.EMPTY_TILE_SIDE);
+        Tile.EmptyTile.add(TileColours.EMPTY_TILE_SIDE + "\t\t " + TileColours.EMPTY_TILE_SIDE);
         Tile.EmptyTile.add(TileColours.EMPTY_TILE_BAR);
 
 
