@@ -102,7 +102,7 @@ public class Board {
 
     public void chooseToken() {
         boolean canPlace = false;
-        chosenToken = Token.presentTokens.get(selection);
+        chosenToken = Token.presentTokens.get(selection-1);
         for (ArrayList<String> myTile : myTiles) {
             if (myTile.get(1).contains(chosenToken) || myTile.get(2).contains(chosenToken)) {
                 canPlace = true;
@@ -114,7 +114,7 @@ public class Board {
             Scanner scanner = new Scanner(System.in);
             String in = scanner.nextLine();
             if (in.equalsIgnoreCase("yes")) {
-                Token.replaceToken(selection);
+                Token.replaceToken(selection-1);
                 placeToken(chosenToken);
             } else {
                 System.out.println("No token has been placed");
