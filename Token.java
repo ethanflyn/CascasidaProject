@@ -24,12 +24,12 @@ public class Token {
     public static void playableTokens() {
         Collections.shuffle(wildlifeTokens);
         int m = wildlifeTokens.size()-1;
-        for (int i = 0; i < 4; i++) {
+        for (int i = presentTokens.size(); i < 4; i++) {
             presentTokens.add(wildlifeTokens.get(m));
             wildlifeTokens.remove(m--);
         }
         System.out.print("\t\t\t\t\t\t");
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < Token.presentTokens.size(); i++) {
             System.out.print("     " + Token.presentTokens.get(i) + "\t\t\t");
         }
         System.out.println();
