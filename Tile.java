@@ -193,10 +193,10 @@ public class Tile {
         }
     }
 
-    public static void playableTiles() {
+     public static void playableTiles() {
         Collections.shuffle(allTiles);
         int m = allTiles.size()-1;
-        for (int i = 0; i < 4; i++) {
+        for (int i = presentTiles.size(); i < 4; i++) {
             presentTiles.add(allTiles.get(m));
             allTiles.remove(m--);
         }
