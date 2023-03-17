@@ -12,7 +12,10 @@ public class Board {
     public ArrayList<ArrayList<String>> myTiles = new ArrayList<>();
     ArrayList<String> chosenTile = new ArrayList<>();
     public static String chosenToken;
-    public static int selection;
+    public int selection;
+    public int natureTokens;
+
+    public int natureChoice;
 
     public Board() {
 
@@ -57,6 +60,20 @@ public class Board {
     }
 
     public void chooseTile(){
+        natureChoice = spendNature();
+        if (natureChoice == 2) {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Enter the number of tokens you wish to replace");
+            int input = scanner.nextInt();
+            int k = input;
+            int i = 0;
+            while (i < k--){
+                Token.replaceToken(i);
+            }
+            Tile.playableTiles();
+            System.out.println(input + " tokens have been replaced");
+        }
+
         System.out.println("Please enter a number between 1-4 to choose which tile you would like to place!");
         Scanner a = new Scanner(System.in);
         selection = a.nextInt();
@@ -100,8 +117,35 @@ public class Board {
 
     }
 
+    public int spendNature() {
+        int choice2=0;
+        if (natureTokens > 0) {
+            System.out.println("Do you want to spend a nature token? You currently have " + natureTokens);
+            Scanner scanner1 = new Scanner(System.in);
+            String choice = scanner1.nextLine();
+            if (choice.equalsIgnoreCase("yes")) {
+                System.out.println("Enter 1 to choose any Token, Enter 2 to wipe any number of tokens");
+                Scanner scanner2 = new Scanner(System.in);
+                choice2 = scanner2.nextInt();
+                natureTokens--;
+            }
+        }
+        return choice2;
+
+    }
+
     public void chooseToken() {
+
         boolean canPlace = false;
+        if (natureChoice == 1) {
+            for (int i = 0; i < Token.presentTokens.size(); i++) {
+                System.out.print("     " + Token.presentTokens.get(i) + "\t\t\t");
+            }
+            System.out.println("\n");
+            System.out.println("Please enter a number between 1-4 to choose which token you would like to place!");
+            Scanner a = new Scanner(System.in);
+            selection = a.nextInt();
+        }
         chosenToken = Token.presentTokens.get(selection-1);
         for (ArrayList<String> myTile : myTiles) {
             if (myTile.get(1).contains(chosenToken) || myTile.get(2).contains(chosenToken)) {
@@ -114,13 +158,13 @@ public class Board {
             Scanner scanner = new Scanner(System.in);
             String in = scanner.nextLine();
             if (in.equalsIgnoreCase("yes")) {
-                Token.replaceToken(selection-1);
                 placeToken(chosenToken);
             } else {
                 System.out.println("No token has been placed");
                 System.out.println("\n\n");
                 GameIntro.NextTurn();
             }
+            Token.replaceToken(selection-1);
         } else {
             System.out.println("You cannot place this token");
             System.out.println("\n\n");
@@ -159,8 +203,19 @@ public class Board {
             placeToken(token);
         }
 
-        if (this.myTiles.get(position).get(1).contains(chosenToken))
-            this.myTiles.get(position).set(1, this.myTiles.get(position).get(1).replace(chosenToken, "\u001B[31m" + chosenToken + "\u001B[0m")) ;
+        if (this.myTiles.get(position).get(1).contains(chosenToken)) {
+            this.myTiles.get(position).set(1, this.myTiles.get(position).get(1).replace(chosenToken, "\u001B[31m" + chosenToken + "\u001B[0m"));
+        }
+
+        if (this.myTiles.get(position).get(2).contains(chosenToken)) {
+            this.myTiles.get(position).set(2, this.myTiles.get(position).get(2).replace(chosenToken, "\u001B[31m" + chosenToken + "\u001B[0m"));
+        }
+
+        if (this.myTiles.get(position).get(1).contains("K") || this.myTiles.get(position).get(2).contains("K")) {
+            natureTokens++;
+            System.out.println("You now have " + natureTokens + " nature tokens");
+        }
+
         System.out.println("you have placed the token");
         System.out.println("\n\n");
         GameIntro.NextTurn();
@@ -183,7 +238,6 @@ public class Board {
     }
 
     public void fillBoard() {
-
 
         Tile.EmptyTile.add(TileColours.EMPTY_TILE_BAR);
         Tile.EmptyTile.add(TileColours.EMPTY_TILE_SIDE + "\t\t " + TileColours.EMPTY_TILE_SIDE);
