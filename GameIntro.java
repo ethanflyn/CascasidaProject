@@ -1,22 +1,13 @@
 import java.util.*;
 
 public class GameIntro {
-
-    private int numUsers;
-    private String starterTile;
-    private String habitatTile;
-    private String wildlifeToken;
-
-    ArrayList<Tile> starterTiles = new ArrayList<>();
     static ArrayList<User> users = new ArrayList<>(4);
     static User currentPlayer;
-    private static final Random rng = new Random () ;
-
 
     public void getUsers() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the number of players (2-4)");
-        numUsers = scanner.nextInt();
+        int numUsers = scanner.nextInt();
 
         while (numUsers < 2 || numUsers > 4) {
             System.out.println("Number of players must be between 2 and 4");
@@ -24,11 +15,9 @@ public class GameIntro {
         }
         Scanner scanner1 = new Scanner(System.in);
 
-        for (int i = 1; i < numUsers+1; i++) {
+        for (int i = 1; i < numUsers +1; i++) {
             System.out.println("Please enter the name of player " + i + ":");
-            Tile [] tempTiles = new Tile[30];
-//            tempTiles[i] = starterTiles.get(rng.nextInt(5));
-            User tempUser = new User(scanner1.nextLine(), tempTiles);
+            User tempUser = new User(scanner1.nextLine());
             users.add(tempUser);
         }
 
@@ -39,7 +28,7 @@ public class GameIntro {
             System.out.println(users.get(i).name);
         }
         currentPlayer = users.get(0);
-        for(int i = 0;i <numUsers;i++){
+        for(int i = 0; i < numUsers; i++){
             users.get(i).getBoard().fillBoard();
         }
         currentPlayer.getBoard().showBoard(0);
@@ -51,7 +40,7 @@ public class GameIntro {
     }
     public static void NextTurn(){
         if (Tile.allTiles.size() < 1) {
-            System.out.println("There are no more tiles in the bag. The game is over");
+            System.out.println("There are no more tiles in the bag. The game is over\n");
             return;
         }
         for(int i = 0;i < users.size();i++){
@@ -75,13 +64,41 @@ public class GameIntro {
         currentPlayer.getBoard().chooseToken();
     }
 
+    public void endGame() {
+        int maxScore=0;
+        int winner=0;
+        int winner1=0;
+        int score=0;
+        for (int i = 0; i < users.size(); i++) {
+            currentPlayer = users.get(i);
+            System.out.println(currentPlayer.getName() + "'s score for this game:");
+            int tempScore = currentPlayer.getBoard().PlayerScoring();
+            if (tempScore > maxScore) {
+                maxScore = tempScore;
+                winner = i;
+            }
+            else if (tempScore == maxScore) {
+                winner1 = i;
+                score = tempScore;
+            }
+        }
 
-
+        if (maxScore == score) {
+            System.out.println("The game is a draw between " + users.get(winner).getName() + " and " + users.get(winner1).getName());
+            System.out.println("Both players had a high score of " + maxScore + " and " + score);
+        }
+        else {
+            System.out.println("The winner of the game is " + users.get(winner).getName() + "\nCONGRATULATIONS!");
+            System.out.println("You had the highest score of " + maxScore);
+        }
+    }
 
     public static void main(String[] args) {
         Tile.habitatArray();
         Tile.wildlifeArray();
         GameIntro g = new GameIntro();
         g.getUsers();
+        g.endGame();
+
     }
 }
