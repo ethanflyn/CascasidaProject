@@ -8,49 +8,57 @@ public class Board {
 
 
     private static int counter = 0;
-
-    public ArrayList<ArrayList<String>> myTiles = new ArrayList<>();
+    public ArrayList<ArrayList<String>> myTiles = new ArrayList<>(); // all tiles on each player's board
     ArrayList<String> chosenTile = new ArrayList<>();
     public static String chosenToken;
-    public int selection;
-    public int natureTokens;
-
-    public int natureChoice;
-
+    public int selection; // which tile/token pair user chooses
+    public int natureTokens; // number of nature tokens each player has
+    public int natureChoice; // which option player chooses to spend nature token on
     public Board() {
 
+    }
+
+    public int PlayerScoring() {
+        int playerScore=0;
+        playerScore += Scoring.scoring(myTiles);
+        playerScore += natureTokens;
+        System.out.println("You have added " + natureTokens + " points to your score for extra nature tokens");
+        System.out.println("You're total score in Cascadia is " + playerScore + "\n");
+        return playerScore;
     }
 
 
     public void placeTile(ArrayList<String> tile) {
 
-        System.out.println("TILE PLACEMENT\nPlease enter the X cordinate of your desired tile\n");
+        System.out.println("TILE PLACEMENT\nPlease enter the X coordinate of your desired tile\n");
         Scanner a = new Scanner(System.in);
         String input = a.nextLine();
         int x = Integer.parseInt(input);
-        if (x < 0 || x > 9) {
-            System.out.println("\t\t\t\t\t\t\tInvalid input!!!!");
-            placeTile(tile);
+        while (x < 0 || x > 9) {
+            System.out.println("Invalid input!!!!");
+            x = Integer.parseInt(a.nextLine());
         }
-        System.out.println("\t\t\t\t\t\t\tPlease enter the Y cordinate of your desired tile");
+        System.out.println("Please enter the Y coordinate of your desired tile");
         Scanner b = new Scanner(System.in);
         String input2 = b.nextLine();
         int y = Integer.parseInt(input2);
-        if (y < 0 || y > 9) {
-            System.out.println("\t\t\t\t\t\t\tInvalid input!!!!");
-            placeTile(tile);
+        while (y < 0 || y > 9) {
+            System.out.println("Invalid input!!!!");
+            y = Integer.parseInt(b.nextLine());
         }
 
         input2 += input;
         int position = Integer.parseInt(input2);
 
         if (this.myTiles.get(position + 1) == Tile.EmptyTile && this.myTiles.get(position - 1) == Tile.EmptyTile && this.myTiles.get(position + 10) == Tile.EmptyTile && this.myTiles.get(position - 10) == Tile.EmptyTile) {
-            System.out.println("\t\t\t\t\t\t\tThere is no adjacent Tiles!!!!");
+            System.out.println("There is no adjacent Tiles!!!!");
             placeTile(tile);
+            return;
         }
         if (this.myTiles.get(position) != Tile.EmptyTile) {
-            System.out.println("\t\t\t\t\t\t\tThere is already a tile placed here!!!!");
+            System.out.println("There is already a tile placed here!!!!");
             placeTile(tile);
+            return;
         }
 
         this.myTiles.set(position, tile);
@@ -81,6 +89,7 @@ public class Board {
         if(selection > 4 || selection < 0){
             System.out.println("Invalid input");
             chooseTile();
+            return;
         }
         chosenTile = Tile.presentTiles.get(selection - 1);
         Tile.replaceTile(selection-1);
@@ -123,6 +132,7 @@ public class Board {
             System.out.println("Do you want to spend a nature token? You currently have " + natureTokens);
             Scanner scanner1 = new Scanner(System.in);
             String choice = scanner1.nextLine();
+
             if (choice.equalsIgnoreCase("yes")) {
                 System.out.println("Enter 1 to choose any Token, Enter 2 to wipe any number of tokens");
                 Scanner scanner2 = new Scanner(System.in);
@@ -131,7 +141,6 @@ public class Board {
             }
         }
         return choice2;
-
     }
 
     public void chooseToken() {
@@ -148,7 +157,7 @@ public class Board {
         }
         chosenToken = Token.presentTokens.get(selection-1);
         for (ArrayList<String> myTile : myTiles) {
-            if (myTile.get(1).contains(chosenToken) || myTile.get(2).contains(chosenToken)) {
+            if (!getTilesToken(myTile).equalsIgnoreCase(chosenToken) && myTile.get(1).contains(chosenToken) || myTile.get(2).contains(chosenToken)) {
                 canPlace = true;
                 break;
             }
@@ -164,7 +173,6 @@ public class Board {
                 System.out.println("\n\n");
                 GameIntro.NextTurn();
             }
-            Token.replaceToken(selection-1);
         } else {
             System.out.println("You cannot place this token");
             System.out.println("\n\n");
@@ -178,15 +186,15 @@ public class Board {
         String input = a.nextLine();
         int x = Integer.parseInt(input);
         if (x < 0 || x > 9) {
-            System.out.println("\t\t\t\t\t\t\tInvalid input!!!!");
+            System.out.println("Invalid input!!!!");
             placeToken(token);
         }
-        System.out.println("\t\t\t\t\t\t\tPlease enter the Y coordinate where you want to place the token");
+        System.out.println("Please enter the Y coordinate where you want to place the token");
         Scanner b = new Scanner(System.in);
         String input2 = b.nextLine();
         int y = Integer.parseInt(input2);
         if (y < 0 || y > 9) {
-            System.out.println("\t\t\t\t\t\t\tInvalid input!!!!");
+            System.out.println("Invalid input!!!!");
             placeToken(token);
         }
 
@@ -194,21 +202,26 @@ public class Board {
         int position = Integer.parseInt(input2);
 
         if (this.myTiles.get(position) == Tile.EmptyTile) {
-            System.out.println("\t\t\t\t\t\t\tThere is no tile placed here!!!!");
+            System.out.println("There is no tile placed here!!!!");
             placeToken(token);
         }
 
-        if (!this.myTiles.get(position).get(1).contains(chosenToken) && !this.myTiles.get(position).get(2).contains(chosenToken)) {
-            System.out.println("\t\t\t\t\t\t\tThis token cannot be placed here");
+        if (!this.myTiles.get(position).get(1).contains(token) && !this.myTiles.get(position).get(2).contains(token)) {
+            System.out.println("This token cannot be placed here");
             placeToken(token);
         }
 
-        if (this.myTiles.get(position).get(1).contains(chosenToken)) {
-            this.myTiles.get(position).set(1, this.myTiles.get(position).get(1).replace(chosenToken, "\u001B[31m" + chosenToken + "\u001B[0m"));
+        if (this.myTiles.get(position).get(1).contains("\u001B[31m" + token + "\u001B[0m") || this.myTiles.get(position).get(2).contains("\u001B[31m" + token + "\u001B[0m")) {
+            System.out.println("There is already a token placed here");
+            placeToken(token);
         }
 
-        if (this.myTiles.get(position).get(2).contains(chosenToken)) {
-            this.myTiles.get(position).set(2, this.myTiles.get(position).get(2).replace(chosenToken, "\u001B[31m" + chosenToken + "\u001B[0m"));
+        if (this.myTiles.get(position).get(1).contains(token)) {
+            this.myTiles.get(position).set(1, this.myTiles.get(position).get(1).replace(token, "\u001B[31m" + token + "\u001B[0m"));
+        }
+
+        if (this.myTiles.get(position).get(2).contains(token)) {
+            this.myTiles.get(position).set(2, this.myTiles.get(position).get(2).replace(token, "\u001B[31m" + token + "\u001B[0m"));
         }
 
         if (this.myTiles.get(position).get(1).contains("K") || this.myTiles.get(position).get(2).contains("K")) {
@@ -218,7 +231,24 @@ public class Board {
 
         System.out.println("you have placed the token");
         System.out.println("\n\n");
+        Token.replaceToken(selection-1);
         GameIntro.NextTurn();
+    }
+
+    public static String getTilesToken(ArrayList<String> list) {
+        if (list.get(1).contains("\u001B[31m" + "H" + "\u001B[0m") || list.get(2).contains("\u001B[31m" + "H" + "\u001B[0m")) {
+            return "H";
+        } else if (list.get(1).contains("\u001B[31m" + "B" + "\u001B[0m") || list.get(2).contains("\u001B[31m" + "B" + "\u001B[0m")) {
+            return "B";
+        } else if (list.get(1).contains("\u001B[31m" + "F" + "\u001B[0m") || list.get(2).contains("\u001B[31m" + "F" + "\u001B[0m")) {
+            return "F";
+        } else if (list.get(1).contains("\u001B[31m" + "S" + "\u001B[0m") || list.get(2).contains("\u001B[31m" + "S" + "\u001B[0m")) {
+            return "S";
+        } else if (list.get(1).contains("\u001B[31m" + "E" + "\u001B[0m") || list.get(2).contains("\u001B[31m" + "E" + "\u001B[0m")) {
+            return "E";
+        } else {
+            return "0";
+        }
     }
 
     public void placeStarterTile() {
@@ -229,11 +259,6 @@ public class Board {
         this.myTiles.set(44, a.TileDisplay());
         this.myTiles.set(54, b.TileDisplay());
         this.myTiles.set(55, c.TileDisplay());
-
-    }
-
-
-    public static void main(String[] args) {
 
     }
 
