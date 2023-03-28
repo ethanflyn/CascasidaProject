@@ -12,8 +12,6 @@ public class Tile {
     private static ArrayList<String> wildlife = new ArrayList<>(); // 5 different wildlife
     public static ArrayList<ArrayList<String>> presentTiles = new ArrayList<>(); // 4 playable tiles in middle of board
     public static ArrayList<ArrayList<String>> allTiles = new ArrayList<>(); // stack of all tiles
-    private boolean hasToken;
-    public static ArrayList<Tile> tiles = new ArrayList<>();
     private String habitatTopBar;
     private String habitatBottomBar;
     private String habitatLeftSide;
@@ -46,11 +44,9 @@ public class Tile {
         wildlife.add(Salmon);
     }
 
-    public Tile(ArrayList<String> habitats, ArrayList<String> wildlife, boolean hasToken) {
+    public Tile(ArrayList<String> habitats, ArrayList<String> wildlife) {
         this.tileHabitats = habitats;
         this.tileWildlife = wildlife;
-        this.hasToken = hasToken;
-
     }
 
     public static Tile generateTile() {
@@ -67,7 +63,7 @@ public class Tile {
         if (x>1) {
             tempHabitats.add(habitats.get(1));
         }
-        return new Tile(tempHabitats, tempWildlife, false);
+        return new Tile(tempHabitats, tempWildlife);
     }
 
     public void KeyStoneDisplay(Tile tile) {
@@ -162,10 +158,9 @@ public class Tile {
             theTile.add(habitatLeftSide + "\t" + (this.tileWildlife.size()>2 ? this.tileWildlife.get(2): " ") + "\t  " + habitatRightSide);
         }
         theTile.add(habitatBottomBar);
-//        allTiles.add(theTile);
 
         return theTile;
-//
+
     }
     
     public static void tileBag() {
@@ -193,7 +188,7 @@ public class Tile {
         }
     }
 
-     public static void playableTiles() {
+    public static void playableTiles() {
         Collections.shuffle(allTiles);
         int m = allTiles.size()-1;
         for (int i = presentTiles.size(); i < 4; i++) {
@@ -221,25 +216,6 @@ public class Tile {
         presentTiles.add(allTiles.get(0));
         allTiles.remove(0);
         Collections.shuffle(allTiles);
-    }
-
-    public void rotateTile(){
-        ArrayList<String> tile = Tile.generateTile().TileDisplay();
-        for(int i = 0;i < 4; i++){
-            System.out.println(tile.get(i));
-        }
-        System.out.println();
-        String habitat1 = tile.get(0);
-        String habitat2 = tile.get(3);
-        String bar1 = tile.get(1);
-        String bar2 = tile.get(2);
-        tile.set(0, habitat2);
-        tile.set(3,habitat1);
-        tile.set(1,bar2);
-        tile.set(2,bar1);
-        for(int i = 0;i < 4; i++){
-            System.out.println(tile.get(i));
-        }
     }
 
     @Override
