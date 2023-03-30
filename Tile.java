@@ -150,12 +150,12 @@ public class Tile {
         ArrayList<String> theTile = new ArrayList<>();
 
         theTile.add(habitatTopBar);
-        theTile.add(habitatLeftSide + "\t" + this.tileWildlife.get(0) + "\t" +
+        theTile.add(habitatLeftSide + "  " + this.tileWildlife.get(0) + "  " +
                 (this.tileWildlife.size() > 1 ? this.tileWildlife.get(1): " ") + " " + habitatRightSide);
         if (this.tileHabitats.size() == 1)
-            theTile.add(habitatLeftSide + (this.tileWildlife.size()>2 ? this.tileWildlife.get(2): " ") + "\t\tK " + habitatRightSide);
+            theTile.add(habitatLeftSide + (this.tileWildlife.size()>2 ? this.tileWildlife.get(2): " ") + "    K " + habitatRightSide);
         else {
-            theTile.add(habitatLeftSide + "\t" + (this.tileWildlife.size()>2 ? this.tileWildlife.get(2): " ") + "\t  " + habitatRightSide);
+            theTile.add(habitatLeftSide + "  " + (this.tileWildlife.size()>2 ? this.tileWildlife.get(2): " ") + "    " + habitatRightSide);
         }
         theTile.add(habitatBottomBar);
 
@@ -163,8 +163,8 @@ public class Tile {
 
     }
     
-    public static void tileBag() {
-        switch (GameIntro.users.size()) {
+    public static void tileBag(int numUsers) {
+        switch (numUsers) {
             case 4:
                 for (int i = 0; i < 83; i++) {
                     Tile temp = generateTile();
@@ -178,7 +178,7 @@ public class Tile {
                 }
                 break;
             case 2:
-                for (int i = 0; i < 43; i++) {
+                for (int i = 0; i < 8; i++) {
                     Tile temp = generateTile();
                     allTiles.add(temp.TileDisplay());
                 }
@@ -200,7 +200,7 @@ public class Tile {
             System.out.print("\t\t\t\t\t\t");
             for (int j = 0; j < 4; j++) {
                 System.out.print(presentTiles.get(j).get(i));
-                System.out.print("\t");
+                System.out.print("			");
             }
             System.out.println();
         }
@@ -218,16 +218,5 @@ public class Tile {
         Collections.shuffle(allTiles);
     }
 
-    @Override
-    public String toString() {
-        return "Tile{}";
-    }
 
-    public static void main(String[] args) {
-        habitatArray();
-        wildlifeArray();
-        Token.generateTokens();
-        tileBag();
-        playableTiles();
-    }
 }
