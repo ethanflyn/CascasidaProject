@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -265,8 +264,8 @@ public class Board {
     public void fillBoard() {
 
         Tile.EmptyTile.add(TileColours.EMPTY_TILE_BAR);
-        Tile.EmptyTile.add(TileColours.EMPTY_TILE_SIDE + "\t\t " + TileColours.EMPTY_TILE_SIDE);
-        Tile.EmptyTile.add(TileColours.EMPTY_TILE_SIDE + "\t\t " + TileColours.EMPTY_TILE_SIDE);
+        Tile.EmptyTile.add(TileColours.EMPTY_TILE_SIDE + "       " + TileColours.EMPTY_TILE_SIDE);
+        Tile.EmptyTile.add(TileColours.EMPTY_TILE_SIDE + "       " + TileColours.EMPTY_TILE_SIDE);
         Tile.EmptyTile.add(TileColours.EMPTY_TILE_BAR);
 
 
@@ -301,7 +300,7 @@ public class Board {
         if (end != 100) {
             showBoard(length + 10);
         } else {
-            System.out.print("\t\t\t\t\t\t\t" + " 0" + "\t\t\t  1\t\t\t 2\t\t\t 3\t\t\t 4\t\t\t 5\t\t\t 6\t\t\t 7\t\t\t 8\t\t\t 9\n");
+            System.out.print("\t\t\t\t\t\t     0          1          2          3          4          5          6          7          8          9\n");
             System.out.println("\t\t\t\t\t\t\tHere is your current board!\n\n");
             counter = 0;
         }
