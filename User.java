@@ -1,27 +1,25 @@
 import java.util.ArrayList;
 
 public class User {
-        protected String name;
-        protected Tile [] tiles;
+    protected String name;
 
-        protected Board myBoard = new Board();
+    protected Board myBoard = new Board();
 
     public String getName() {
         return name;
     }
-
     protected ArrayList<ArrayList<String>> allTiles;
 
-        public User(String name, Tile [] tiles) {
-            this.name = name;
-            this.tiles = tiles;
-        }
+    public User(String name) {
+        this.name = name;
+    }
 
     public Board getBoard() {
         return myBoard;
     }
     public ArrayList<ArrayList<String>> getAllTiles(){
-            return allTiles;
+        return allTiles;
     }
 }
+
 
