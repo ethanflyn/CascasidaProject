@@ -330,8 +330,4 @@ public class Scoring {
         }
         return score;
     }
-
-    public int habitatScoring(ArrayList<ArrayList<String>> tiles) {
-        return 0;
-    }
 }
