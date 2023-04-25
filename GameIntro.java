@@ -17,7 +17,8 @@ public class GameIntro {
 
         for (int i = 1; i < numUsers +1; i++) {
             System.out.println("Please enter the name of player " + i + ":");
-            User tempUser = new User(scanner1.nextLine());
+            String username = scanner1.nextLine();
+            User tempUser = new User(username);
             users.add(tempUser);
         }
 
@@ -37,6 +38,32 @@ public class GameIntro {
         Tile.playableTiles();
         currentPlayer.getBoard().chooseTile();
         currentPlayer.getBoard().chooseToken();
+    }
+
+    public void playBot(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("CASCADIA VS BOT\nPlease enter your name");
+        User tempUser = new User(scanner.nextLine());
+        users.add(tempUser);
+        User theBot = new User("BOT");
+        users.add(theBot);
+        System.out.println("You will play in the following order:\n");
+        Collections.shuffle(users);
+        for (int i = 0; i < 2; i++) {
+            System.out.println(users.get(i).name);
+        }
+        currentPlayer = users.get(0);
+        for(int i = 0; i < 2; i++){
+            users.get(i).getBoard().fillBoard();
+        }
+        currentPlayer.getBoard().showBoard(0);
+        Tile.tileBag();
+        Token.generateTokens();
+        Tile.playableTiles();
+        currentPlayer.getBoard().chooseTile();
+        currentPlayer.getBoard().chooseToken();
+
+
     }
     public static void NextTurn(){
         if (Tile.allTiles.size() < 1) {
@@ -101,4 +128,6 @@ public class GameIntro {
         g.endGame();
 
     }
+
+
 }
