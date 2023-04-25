@@ -3,53 +3,67 @@ import java.util.Random;
 import java.util.SimpleTimeZone;
 
 public class Bot {
-
-    boolean shouldCull = false;
-    public int getBotToken(ArrayList<ArrayList<String>> tiles, int natureTokens) {
-        Random rng = new Random();
-        int turnScore=0;
-        String maxToken = "";
-
-        boolean canPlace = false;
-        int tokenIndex=0;
+    static boolean shouldCull = false;
+    static int tileIndex = -1;
+    public static int getBotToken(ArrayList<ArrayList<String>> tiles, int natureTokens) {
+        ArrayList<ArrayList<String>> tempTiles = tiles;
+        ArrayList<ArrayList<String>> tempTiles2 = tiles;
+        int tempScore = 0;
+        int maxScore = 0;
+        int tempNature = natureTokens;
+        int presentTokenIndex = 0;
         for (int i = 0; i < Token.presentTokens.size(); i++) {
-            for (ArrayList<String> tile : tiles) {
-                if (!Board.getTilesToken(tile).equalsIgnoreCase(Token.presentTokens.get(i)) &&
-                        tile.get(1).contains(Token.presentTokens.get(i)) ||
-                        tile.get(2).contains(Token.presentTokens.get(i))) {
-                    canPlace = true;
-                    tokenIndex = i;
-                    break;
+            String tempToken = Token.presentTokens.get(i);
+            // habitatBotPlace method
+            for (int j = 0; j < tempTiles.size(); j++) {
+                if (Board.getTilesToken(tiles.get(j)).equalsIgnoreCase("0") &&
+                        tempTiles.get(j).get(1).contains(tempToken) ||
+                        tempTiles.get(j).get(2).contains(tempToken)) {
+
+                    if (tempTiles.get(j).get(1).contains(tempToken)) {
+                        tempTiles.get(j).set(1, tempTiles.get(j).get(1).replace(tempToken, "\u001B[31m" + tempToken + "\u001B[0m"));
+                    }
+
+                    if (tempTiles.get(j).get(2).contains(tempToken)) {
+                        tempTiles.get(j).set(2, tempTiles.get(j).get(2).replace(tempToken, "\u001B[31m" + tempToken + "\u001B[0m"));
+                    }
+
+                    if (tempTiles.get(j).get(1).contains("K") || tempTiles.get(j).get(2).contains("K")) {
+                        tempNature++;
+                    }
+
+                    tempScore = botScoring(tiles, tempNature);
+                    if (tempScore > maxScore) {
+                        maxScore = tempScore;
+                        tileIndex = j;
+                        presentTokenIndex = i;
+                    }
+                    tempTiles = tempTiles2;
+                    tempNature = natureTokens;
                 }
             }
+            tempTiles = tiles;
         }
+        return presentTokenIndex;
+    }
 
-        if (Token.presentTokens.contains("B") && Scoring.bearScoring(tiles) > turnScore) {
-            turnScore = Scoring.bearScoring(tiles);
-            maxToken = "B";
-        } if (Token.presentTokens.contains("S") && Scoring.salmonScoring(tiles) > turnScore) {
-            turnScore = Scoring.salmonScoring(tiles);
-            maxToken = "S";
-        } if (Token.presentTokens.contains("H") && Scoring.hawkScoring(tiles) > turnScore) {
-            turnScore =  Scoring.hawkScoring(tiles);
-            maxToken = "H";
-        } if (Token.presentTokens.contains("E") && Scoring.elkScoring(tiles) > turnScore) {
-            turnScore = Scoring.elkScoring(tiles);
-            maxToken = "E";
-        } if (Token.presentTokens.contains("F") && Scoring.foxScoring(tiles) > turnScore) {
-            maxToken = "F";
-        }
-
-        if (!maxToken.equals("")) {
-            if (canPlace) {
-                return tokenIndex;
-            }
-            return -1;
-        }
+    public int placeBotToken() {
+        if (tileIndex != -1)
+            return tileIndex;
         else {
-            shouldCull = true;
-            return Token.presentTokens.indexOf(maxToken);
+            throw new IllegalArgumentException("No token can be placed");
         }
+    }
+
+    public static int botScoring(ArrayList<ArrayList<String>> tiles, int natureTokens) {
+        int score = 0;
+        score += Scoring.bearScoring(tiles);
+        score += Scoring.hawkScoring(tiles);
+        score += Scoring.foxScoring(tiles);
+        score += Scoring.elkScoring(tiles);
+        score += Scoring.salmonScoring(tiles);
+        score += natureTokens;
+        return score;
     }
 
     public void botCulling(ArrayList<String> tokens) {
@@ -58,7 +72,7 @@ public class Bot {
         }
     }
 
-    public int botNatureTokens(int natureTokens) {
+    public static int botNatureTokens(int natureTokens) {
         if (natureTokens > 0 && shouldCull) {
             return 2;
         }
