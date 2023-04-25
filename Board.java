@@ -22,29 +22,40 @@ public class Board {
         int playerScore=0;
         playerScore += Scoring.scoring(myTiles);
         playerScore += natureTokens;
-        System.out.println("You have " + natureTokens + " points for extra nature tokens");
+        System.out.println("You have added " + natureTokens + " points to your score for extra nature tokens");
         System.out.println("You're total score in Cascadia is " + playerScore + "\n");
         return playerScore;
     }
 
 
     public void placeTile(ArrayList<String> tile) {
-
+        String input;
+        String input2;
         System.out.println("TILE PLACEMENT\nPlease enter the X coordinate of your desired tile\n");
-        Scanner a = new Scanner(System.in);
-        String input = a.nextLine();
+        if(GameIntro.currentPlayer.getName().equals("BOT")){
+            input = Bot.placeTileXCord();
+        }
+        else {
+            Scanner a = new Scanner(System.in);
+            input = a.nextLine();
+        }
         int x = Integer.parseInt(input);
-        while (x < 0 || x > 9) {
+        if(x < 0 || x > 9) {
             System.out.println("Invalid input!!!!");
-            x = Integer.parseInt(a.nextLine());
+            placeTile(tile);
         }
         System.out.println("Please enter the Y coordinate of your desired tile");
-        Scanner b = new Scanner(System.in);
-        String input2 = b.nextLine();
+        if(GameIntro.currentPlayer.getName().equals("BOT")){
+            input2 = Bot.placeTileYCord(myTiles);
+        }
+        else {
+            Scanner b = new Scanner(System.in);
+            input2 = b.nextLine();
+        }
         int y = Integer.parseInt(input2);
-        while (y < 0 || y > 9) {
+        if(y < 0 || y > 9) {
             System.out.println("Invalid input!!!!");
-            y = Integer.parseInt(b.nextLine());
+            placeTile(tile);
         }
 
         input2 += input;
@@ -68,11 +79,20 @@ public class Board {
     }
 
     public void chooseTile(){
+        int input;
         natureChoice = spendNature();
         if (natureChoice == 2) {
-            Scanner scanner = new Scanner(System.in);
             System.out.println("Enter the number of tokens you wish to replace");
-            int input = scanner.nextInt();
+            if(GameIntro.currentPlayer.getName().equals("BOT")){
+                 input = Bot.replaceTokens();
+
+            }
+            else{
+            Scanner scanner = new Scanner(System.in);
+                 input = scanner.nextInt();
+            }
+
+
             int k = input;
             int i = 0;
             while (i < k--){
@@ -83,8 +103,14 @@ public class Board {
         }
 
         System.out.println("Please enter a number between 1-4 to choose which tile you would like to place!");
-        Scanner a = new Scanner(System.in);
-        selection = a.nextInt();
+        if(GameIntro.currentPlayer.getName().equals("BOT")){
+            selection = Bot.choseTile();
+        }
+        else {
+            Scanner a = new Scanner(System.in);
+            selection = a.nextInt();
+        }
+
 
         if(selection > 4 || selection < 0){
             System.out.println("Invalid input");
@@ -97,10 +123,16 @@ public class Board {
         rotateTile(chosenTile);
     }
     public void rotateTile(ArrayList<String> tile){
-
+        String input;
         System.out.println("Would you like to rotate your tile?\nEnter 'yes' or 'no'");
-        Scanner a = new Scanner(System.in);
-        String input = a.nextLine();
+        if(GameIntro.currentPlayer.getName().equals("BOT")){
+            input = Bot.rotateTile();
+        }
+        else {
+            Scanner a = new Scanner(System.in);
+            input = a.nextLine();
+        }
+
         if(input.equalsIgnoreCase("no") ){
             placeTile(tile);
         }
@@ -127,11 +159,17 @@ public class Board {
     }
 
     public int spendNature() {
+        String choice;
         int choice2=0;
         if (natureTokens > 0) {
             System.out.println("Do you want to spend a nature token? You currently have " + natureTokens);
-            Scanner scanner1 = new Scanner(System.in);
-            String choice = scanner1.nextLine();
+            if(GameIntro.currentPlayer.getName().equals("BOT")){
+                choice = Bot.spendNature();
+            }
+            else {
+                Scanner scanner1 = new Scanner(System.in);
+                choice = scanner1.nextLine();
+            }
 
             if (choice.equalsIgnoreCase("yes")) {
                 System.out.println("Enter 1 to choose any Token, Enter 2 to wipe any number of tokens");
@@ -152,8 +190,13 @@ public class Board {
             }
             System.out.println("\n");
             System.out.println("Please enter a number between 1-4 to choose which token you would like to place!");
-            Scanner a = new Scanner(System.in);
-            selection = a.nextInt();
+            if(GameIntro.currentPlayer.getName().equals("BOT")){
+                selection = Bot.getBotToken(myTiles, natureTokens);
+            }
+            else {
+                Scanner a = new Scanner(System.in);
+                selection = a.nextInt();
+            }
         }
         chosenToken = Token.presentTokens.get(selection-1);
         for (ArrayList<String> myTile : myTiles) {
@@ -163,39 +206,53 @@ public class Board {
             }
         }
         if (canPlace) {
+            String in;
             System.out.println("Do you want to place the token? " + chosenToken);
-            Scanner scanner = new Scanner(System.in);
-            String in = scanner.nextLine();
+            if(GameIntro.currentPlayer.getName().equals("BOT")){
+                in = Bot.placeTokens();
+            }
+            else {
+                Scanner scanner = new Scanner(System.in);
+                in = scanner.nextLine();
+            }
             if (in.equalsIgnoreCase("yes")) {
                 placeToken(chosenToken);
             } else {
                 System.out.println("No token has been placed");
-                System.out.println("\n\n");
-                PlayerScoring();
                 System.out.println("\n\n");
                 GameIntro.NextTurn();
             }
         } else {
             System.out.println("You cannot place this token");
             System.out.println("\n\n");
-            PlayerScoring();
-            System.out.println("\n\n");
             GameIntro.NextTurn();
         }
     }
 
     public void placeToken(String token) {
+        String input;
+        String input2;
         System.out.println("TOKEN PLACEMENT\nPlease enter the X coordinate where you want to place the token\n");
-        Scanner a = new Scanner(System.in);
-        String input = a.nextLine();
+        if(GameIntro.currentPlayer.getName().equals("BOT")){
+            input = Bot.placeTokenXCord(myTiles);
+        }
+        else {
+            Scanner a = new Scanner(System.in);
+             input = a.nextLine();
+        }
         int x = Integer.parseInt(input);
         if (x < 0 || x > 9) {
             System.out.println("Invalid input!!!!");
             placeToken(token);
         }
         System.out.println("Please enter the Y coordinate where you want to place the token");
-        Scanner b = new Scanner(System.in);
-        String input2 = b.nextLine();
+        if(GameIntro.currentPlayer.getName().equals("BOT")){
+            input2 = Bot.placeTokenYCord(myTiles);
+        }
+        else {
+            Scanner b = new Scanner(System.in);
+            input2 = b.nextLine();
+        }
         int y = Integer.parseInt(input2);
         if (y < 0 || y > 9) {
             System.out.println("Invalid input!!!!");
@@ -236,9 +293,6 @@ public class Board {
         System.out.println("you have placed the token");
         System.out.println("\n\n");
         Token.replaceToken(selection-1);
-        showBoard(0);
-        PlayerScoring();
-        System.out.println("\n\n");
         GameIntro.NextTurn();
     }
 
@@ -272,8 +326,8 @@ public class Board {
     public void fillBoard() {
 
         Tile.EmptyTile.add(TileColours.EMPTY_TILE_BAR);
-        Tile.EmptyTile.add(TileColours.EMPTY_TILE_SIDE + "\t\t " + TileColours.EMPTY_TILE_SIDE);
-        Tile.EmptyTile.add(TileColours.EMPTY_TILE_SIDE + "\t\t " + TileColours.EMPTY_TILE_SIDE);
+        Tile.EmptyTile.add(TileColours.EMPTY_TILE_SIDE + "        " + TileColours.EMPTY_TILE_SIDE);
+        Tile.EmptyTile.add(TileColours.EMPTY_TILE_SIDE + "        " + TileColours.EMPTY_TILE_SIDE);
         Tile.EmptyTile.add(TileColours.EMPTY_TILE_BAR);
 
 
