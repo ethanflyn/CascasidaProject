@@ -33,7 +33,8 @@ public class Board {
         String input2;
         System.out.println("TILE PLACEMENT\nPlease enter the X coordinate of your desired tile\n");
         if(GameIntro.currentPlayer.getName().equals("BOT")){
-            input = Bot.placeTileXCord();
+          char num = Bot.placeTileXCord(GameIntro.currentPlayer.getBoard().myTiles ,tile);
+            input = Character.toString(num);
         }
         else {
             Scanner a = new Scanner(System.in);
@@ -46,7 +47,8 @@ public class Board {
         }
         System.out.println("Please enter the Y coordinate of your desired tile");
         if(GameIntro.currentPlayer.getName().equals("BOT")){
-            input2 = Bot.placeTileYCord(myTiles);
+            char num = Bot.placeTileYCord(GameIntro.currentPlayer.getBoard().myTiles  ,tile);
+            input2 = Character.toString(num);
         }
         else {
             Scanner b = new Scanner(System.in);
