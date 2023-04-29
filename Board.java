@@ -106,7 +106,7 @@ public class Board {
 
         System.out.println("Please enter a number between 1-4 to choose which tile you would like to place!");
         if(GameIntro.currentPlayer.getName().equals("BOT")){
-            selection = Bot.choseTile();
+            selection = Bot.getBotToken(myTiles, natureTokens);
         }
         else {
             Scanner a = new Scanner(System.in);
@@ -236,7 +236,7 @@ public class Board {
         String input2;
         System.out.println("TOKEN PLACEMENT\nPlease enter the X coordinate where you want to place the token\n");
         if(GameIntro.currentPlayer.getName().equals("BOT")){
-            input = Bot.placeTokenXCord(myTiles);
+            input = String.valueOf(Bot.BotTokenXCoordinate());
         }
         else {
             Scanner a = new Scanner(System.in);
@@ -249,7 +249,7 @@ public class Board {
         }
         System.out.println("Please enter the Y coordinate where you want to place the token");
         if(GameIntro.currentPlayer.getName().equals("BOT")){
-            input2 = Bot.placeTokenYCord(myTiles);
+            input2 = String.valueOf(Bot.BotTokenYCoordinate());
         }
         else {
             Scanner b = new Scanner(System.in);
@@ -292,10 +292,13 @@ public class Board {
             System.out.println("You now have " + natureTokens + " nature tokens");
         }
 
-        System.out.println("you have placed the token");
+         System.out.println("you have placed the token");
         System.out.println("\n\n");
         Token.replaceToken(selection-1);
+        showBoard(0);
+        Scoring.scoring(myTiles);
         GameIntro.NextTurn();
+    }
     }
 
     public static String getTilesToken(ArrayList<String> list) {
