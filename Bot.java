@@ -57,23 +57,30 @@ public class Bot {
     
     
 
-    public static char placeTileXCord(ArrayList<ArrayList<String>> boardOfTiles,  ArrayList<String> tile){
+   public static char placeTileXCord(ArrayList<ArrayList<String>> boardOfTiles, ArrayList<String> tile){
         placeTile(boardOfTiles, tile);
-        if (tileCord < 10) return '0';
-        else{
-           char ans = Integer.toString(tileCord).charAt(0);
-           System.out.println(ans);
-           return ans;
-       }
-    }
-    public static char placeTileYCord(ArrayList<ArrayList<String>> boardOfTiles, ArrayList<String> tile){
         char ans = Integer.toString(tileCord).charAt(1);
-
+        System.out.println("The y cord is " +  ans);
         return ans;
     }
 
 
+    public static char placeTileYCord(ArrayList<ArrayList<String>> boardOfTiles,  ArrayList<String> tile){
+        if (tileCord < 10) return '0';
+        else{
+           char ans = Integer.toString(tileCord).charAt(0);
+            System.out.println("The x cord is " +  ans);
+           return ans;
+       }
+    }
+
     public static void placeTile(ArrayList<ArrayList<String>> boardOfTiles, ArrayList<String> tile){
+
+
+        String topBar = tile.get(0);
+//        char leftSide = tile.get(1).charAt(0);
+//        char rightSide = tile.get(1).charAt(tile.get(1).length());
+        String bottomBar = tile.get(3);
 
         ArrayList<Integer> tileIndexes = new ArrayList<>();
 
@@ -84,24 +91,34 @@ public class Bot {
                 if(!boardOfTiles.get(j).get(0).equals(TileColours.EMPTY_TILE_BAR)) {
                     tileIndexes.add(j);
                 }
-            }
-
                 Collections.shuffle(tileIndexes);
+            }
+            int i = 0;
+
+
         System.out.println(tileIndexes.get(0));
-            if(boardOfTiles.get(tileIndexes.get(0) + 1).get(0).equals(TileColours.EMPTY_TILE_BAR) && tileIndexes.get(0) % 10 != 9){
-                tileCord =  tileIndexes.get(0) + 1;
-            }
-            else if(boardOfTiles.get(tileIndexes.get(0) - 1).get(0).equals(TileColours.EMPTY_TILE_BAR) && tileIndexes.get(0) % 10 != 0){
-                tileCord = tileIndexes.get(0) - 1;
-            }
-            else if(boardOfTiles.get(tileIndexes.get(0) + 10).get(0).equals(TileColours.EMPTY_TILE_BAR) && tileIndexes.get(0) < 90){
-                tileCord = tileIndexes.get(0) + 10;
-            }
-            else if(boardOfTiles.get(tileIndexes.get(0) - 10).get(0).equals(TileColours.EMPTY_TILE_BAR) && tileIndexes.get(0) > 10){
-                tileCord = tileIndexes.get(0) - 10;
+            while(true) {
+                if (boardOfTiles.get(tileIndexes.get(i) + 1).get(0).equals(TileColours.EMPTY_TILE_BAR)) {
+                    tileCord = tileIndexes.get(0) + 1;
+                    break;
+                } else if (boardOfTiles.get(tileIndexes.get(i) - 1).get(0).equals(TileColours.EMPTY_TILE_BAR)) {
+                    tileCord = tileIndexes.get(0) - 1;
+                    break;
+                } else if (boardOfTiles.get(tileIndexes.get(i) + 10).get(0).equals(TileColours.EMPTY_TILE_BAR)) {
+                    tileCord = tileIndexes.get(0) + 10;
+                    break;
+                } else if (boardOfTiles.get(tileIndexes.get(i) - 10).get(0).equals(TileColours.EMPTY_TILE_BAR)) {
+                    tileCord = tileIndexes.get(0) - 10;
+                    break;
+                }
+                else{
+                    i++;
+                }
             }
 
     }
+
+
     
 
     public static int botScoring(ArrayList<ArrayList<String>> tiles, int natureTokens) {
