@@ -3,32 +3,38 @@ import java.util.Random;
 import java.util.SimpleTimeZone;
 
 public class Bot {
-    static boolean shouldCull = false;
+     static boolean shouldCull = false;
     static int tileIndex = -1;
+    static int tileCord;
+    static int maxScore;
+    static int presentTokenIndex = 0;
     public static int getBotToken(ArrayList<ArrayList<String>> tiles, int natureTokens) {
         ArrayList<ArrayList<String>> tempTiles = tiles;
         ArrayList<ArrayList<String>> tempTiles2 = tiles;
         int tempScore = 0;
-        int maxScore = 0;
+        maxScore = 0;
         int tempNature = natureTokens;
-        int presentTokenIndex = 0;
+
         for (int i = 0; i < Token.presentTokens.size(); i++) {
             String tempToken = Token.presentTokens.get(i);
             // habitatBotPlace method
+            placeTile(tempTiles, Tile.presentTiles.get(i));
+            tempTiles.set(tileCord, Tile.presentTiles.get(i));
+
             for (int j = 0; j < tempTiles.size(); j++) {
                 if (Board.getTilesToken(tiles.get(j)).equalsIgnoreCase("0") &&
-                        tempTiles.get(j).get(1).contains(tempToken) ||
-                        tempTiles.get(j).get(2).contains(tempToken)) {
+                        tempTiles2.get(j).get(1).contains(tempToken) ||
+                        tempTiles2.get(j).get(2).contains(tempToken)) {
 
-                    if (tempTiles.get(j).get(1).contains(tempToken)) {
-                        tempTiles.get(j).set(1, tempTiles.get(j).get(1).replace(tempToken, "\u001B[31m" + tempToken + "\u001B[0m"));
+                    if (tempTiles2.get(j).get(1).contains(tempToken)) {
+                        tempTiles2.get(j).set(1, tempTiles2.get(j).get(1).replace(tempToken, "\u001B[31m" + tempToken + "\u001B[0m"));
                     }
 
-                    if (tempTiles.get(j).get(2).contains(tempToken)) {
-                        tempTiles.get(j).set(2, tempTiles.get(j).get(2).replace(tempToken, "\u001B[31m" + tempToken + "\u001B[0m"));
+                    if (tempTiles2.get(j).get(2).contains(tempToken)) {
+                        tempTiles2.get(j).set(2, tempTiles2.get(j).get(2).replace(tempToken, "\u001B[31m" + tempToken + "\u001B[0m"));
                     }
 
-                    if (tempTiles.get(j).get(1).contains("K") || tempTiles.get(j).get(2).contains("K")) {
+                    if (tempTiles2.get(j).get(1).contains("K") || tempTiles2.get(j).get(2).contains("K")) {
                         tempNature++;
                     }
 
@@ -38,21 +44,41 @@ public class Bot {
                         tileIndex = j;
                         presentTokenIndex = i;
                     }
-                    tempTiles = tempTiles2;
+
+                    if (tempTiles2.get(j).get(1).contains("\u001B[31m" + tempToken + "\u001B[0m")) {
+                        tempTiles2.get(j).set(1, tempTiles2.get(j).get(1).replace("\u001B[31m" + tempToken + "\u001B[0m", tempToken));
+                    }
+
+                    if (tempTiles2.get(j).get(2).contains("\u001B[31m" + tempToken + "\u001B[0m")) {
+                        tempTiles2.get(j).set(2, tempTiles2.get(j).get(2).replace("\u001B[31m" + tempToken + "\u001B[0m", tempToken));
+                    }
+
                     tempNature = natureTokens;
                 }
             }
-            tempTiles = tiles;
+            tempTiles.set(tileCord, Tile.EmptyTile);
         }
-        return presentTokenIndex;
+        return presentTokenIndex+1;
     }
 
-    public int placeBotToken() {
+    public static int BotTokenXCoordinate() {
         if (tileIndex != -1)
-            return tileIndex;
+            return tileIndex / 10;
         else {
             throw new IllegalArgumentException("No token can be placed");
         }
+    }
+
+    public static int BotTokenYCoordinate() {
+        if (tileIndex != -1)
+            return tileIndex % 10;
+        else {
+            throw new IllegalArgumentException("No token can be placed");
+        }
+    }
+
+    public static String BotPlaceToken() {
+        return "yes";
     }
     
     
