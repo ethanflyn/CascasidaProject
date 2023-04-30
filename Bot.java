@@ -164,10 +164,35 @@ public class Bot {
         }
     }
 
-    public static int botNatureTokens(int natureTokens) {
-        if (natureTokens > 0 && shouldCull) {
-            return 2;
+//     public static int botNatureTokens(int natureTokens) {
+//         if (natureTokens > 0 && shouldCull) {
+//             return 2;
+//         }
+//         return 0;
+//     }
+         public static int chooseNatureOption(){
+        for(int i = 0;i < GameIntro.currentPlayer.getBoard().myTiles.size();i++){
+            for (int j = 0;j < GameIntro.currentPlayer.getBoard().myTiles.get(i).size();j++){
+                for(int k = 0; k< GameIntro.currentPlayer.getBoard().myTiles.get(i).get(j).toCharArray().length;k++){
+                    if(GameIntro.currentPlayer.getBoard().myTiles.get(i).get(j).charAt(k) == Token.presentTokens.get(0).charAt(0)){
+                        natureTokenChoice = 1;
+                        return 1;
+                    }
+                    else if(GameIntro.currentPlayer.getBoard().myTiles.get(i).get(j).charAt(k) == Token.presentTokens.get(1).charAt(0)){
+                        natureTokenChoice = 2;
+                        return 1;
+                    }
+                    else if(GameIntro.currentPlayer.getBoard().myTiles.get(i).get(j).charAt(k) == Token.presentTokens.get(2).charAt(0)){
+                        natureTokenChoice = 3;
+                        return 1;
+                    }
+                    else if(GameIntro.currentPlayer.getBoard().myTiles.get(i).get(j).charAt(k) == Token.presentTokens.get(3).charAt(0)){
+                        natureTokenChoice = 4;
+                        return 1;
+                    }
+                }
+            }
         }
-        return 0;
+        return 2;
     }
 }
