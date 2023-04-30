@@ -9,6 +9,9 @@ public class Bot {
     static int maxScore;
     static int presentTokenIndex = 0;
     static int bestTileCord;
+    static int natureTokenChoice;
+    static ArrayList<Integer> placedIndexes = new ArrayList<>();
+
      
       public static String rotateTile(){
         Random rand = new Random();
@@ -244,6 +247,14 @@ public class Bot {
             }
         }
           
+        if(tokenCheck){
+            return "no";
+        }
+        else{
+            return "yes";
+        }
+
+    }
     public static String spendNature(){
         return "yes";
 
