@@ -3,11 +3,12 @@ import java.util.Random;
 import java.util.SimpleTimeZone;
 
 public class Bot {
-     static boolean shouldCull = false;
+    static boolean shouldCull = false;
     static int tileIndex = -1;
     static int tileCord;
     static int maxScore;
     static int presentTokenIndex = 0;
+    static int bestTileCord;
      
       public static String rotateTile(){
         Random rand = new Random();
@@ -109,17 +110,17 @@ public class Bot {
     
 
    public static char placeTileXCord(ArrayList<ArrayList<String>> boardOfTiles, ArrayList<String> tile){
-        char ans = Integer.toString(tileCord).charAt(1);
-        System.out.println("The y cord is " +  ans);
+        char ans = Integer.toString(bestTileCord).charAt(1);
+        System.out.println("The x cord is " +  ans);
         return ans;
     }
 
 
     public static char placeTileYCord(ArrayList<ArrayList<String>> boardOfTiles,  ArrayList<String> tile){
-        if (tileCord < 10) return '0';
+        if (bestTileCord < 10) return '0';
         else{
-           char ans = Integer.toString(tileCord).charAt(0);
-            System.out.println("The x cord is " +  ans);
+           char ans = Integer.toString(bestTileCord).charAt(0);
+            System.out.println("The y cord is " +  ans);
            return ans;
        }
     }
