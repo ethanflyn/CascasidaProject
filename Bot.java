@@ -8,6 +8,17 @@ public class Bot {
     static int tileCord;
     static int maxScore;
     static int presentTokenIndex = 0;
+     
+      public static String rotateTile(){
+        Random rand = new Random();
+        int ans = rand.nextInt(100000) % 2;
+        return switch (ans) {
+            case 0 -> "yes";
+            case 1 -> "no";
+            default -> null;
+        };
+      }
+    
     public static int getBotToken(ArrayList<ArrayList<String>> tiles, int natureTokens) {
         ArrayList<ArrayList<String>> tempTiles = tiles;
         ArrayList<ArrayList<String>> tempTiles2 = tiles;
@@ -158,11 +169,7 @@ public class Bot {
         return score;
     }
 
-    public void botCulling(ArrayList<String> tokens) {
-        if (shouldCull) {
-            Culling.cullRequired();
-        }
-    }
+ 
 
 //     public static int botNatureTokens(int natureTokens) {
 //         if (natureTokens > 0 && shouldCull) {
@@ -195,4 +202,46 @@ public class Bot {
         }
         return 2;
     }
+     public static String culling(){
+        ArrayList<String> tokens = Token.presentTokens;
+        ArrayList<ArrayList<String>> playerTiles = GameIntro.currentPlayer.getBoard().myTiles;
+        boolean tokenCheck = false;
+
+        for(int i = 0;i < playerTiles.size();i++){
+            for(int j = 0;j <playerTiles.get(i).size();j++){
+                for(int k = 0;k < playerTiles.get(i).get(j).toCharArray().length;k++){
+                    if(playerTiles.get(i).get(j).charAt(k) == tokens.get(0).charAt(0) && !placedIndexes.contains(i)){
+                        tokenCheck = true;
+                        break;
+                    }
+                    if(playerTiles.get(i).get(j).charAt(k) == tokens.get(1).charAt(0) && !placedIndexes.contains(i)){
+                        tokenCheck = true;
+                        break;
+                    }
+                    if(playerTiles.get(i).get(j).charAt(k) == tokens.get(2).charAt(0) && !placedIndexes.contains(i)){
+                        tokenCheck = true;
+                        break;
+                    }
+                    if(playerTiles.get(i).get(j).charAt(k) == tokens.get(3).charAt(0) && !placedIndexes.contains(i)){
+                        tokenCheck = true;
+                        break;
+                    }
+                }
+            }
+        }
+          
+    public static String spendNature(){
+        return "yes";
+
+    }
+    public static int replaceTokens(){
+        Random rand = new Random();
+        return rand.nextInt(10000) % 5;
+    }
+
+    public static String askedToPlaceTokens(){
+          return "yes";
+    }
+  }
+
 }
