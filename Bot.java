@@ -19,10 +19,10 @@ public class Bot {
         };
       }
     
-    public static int getBotToken(ArrayList<ArrayList<String>> tiles, int natureTokens) {
+   public static int getBotToken(ArrayList<ArrayList<String>> tiles, int natureTokens) {
         ArrayList<ArrayList<String>> tempTiles = tiles;
         ArrayList<ArrayList<String>> tempTiles2 = tiles;
-        int tempScore = 0;
+        int tempScore;
         maxScore = 0;
         int tempNature = natureTokens;
 
@@ -30,18 +30,20 @@ public class Bot {
             String tempToken = Token.presentTokens.get(i);
             // habitatBotPlace method
             placeTile(tempTiles, Tile.presentTiles.get(i));
+            System.out.println(tileCord + " tilecord");
             tempTiles.set(tileCord, Tile.presentTiles.get(i));
-
             for (int j = 0; j < tempTiles.size(); j++) {
                 if (Board.getTilesToken(tiles.get(j)).equalsIgnoreCase("0") &&
+                        !tempTiles2.get(j).equals(Tile.EmptyTile) &&
+                        canPlace(tiles, tempToken) &&
                         tempTiles2.get(j).get(1).contains(tempToken) ||
                         tempTiles2.get(j).get(2).contains(tempToken)) {
 
-                    if (tempTiles2.get(j).get(1).contains(tempToken)) {
+                    if (tempTiles2.get(j).get(1).contains(tempToken) && Board.getTilesToken(tiles.get(j)).equals("0")) {
                         tempTiles2.get(j).set(1, tempTiles2.get(j).get(1).replace(tempToken, "\u001B[31m" + tempToken + "\u001B[0m"));
                     }
 
-                    if (tempTiles2.get(j).get(2).contains(tempToken)) {
+                    if (tempTiles2.get(j).get(2).contains(tempToken) && Board.getTilesToken(tiles.get(j)).equals("0")) {
                         tempTiles2.get(j).set(2, tempTiles2.get(j).get(2).replace(tempToken, "\u001B[31m" + tempToken + "\u001B[0m"));
                     }
 
@@ -50,10 +52,11 @@ public class Bot {
                     }
 
                     tempScore = botScoring(tiles, tempNature);
-                    if (tempScore > maxScore) {
+                    if (tempScore >= maxScore) {
                         maxScore = tempScore;
                         tileIndex = j;
                         presentTokenIndex = i;
+                        bestTileCord = tileCord;
                     }
 
                     if (tempTiles2.get(j).get(1).contains("\u001B[31m" + tempToken + "\u001B[0m")) {
@@ -69,18 +72,20 @@ public class Bot {
             }
             tempTiles.set(tileCord, Tile.EmptyTile);
         }
+        System.out.println(tileIndex + " this");
         return presentTokenIndex+1;
     }
 
-    public static int BotTokenXCoordinate() {
-        if (tileIndex != -1)
-            return tileIndex / 10;
-        else {
-            throw new IllegalArgumentException("No token can be placed");
+    public static boolean canPlace(ArrayList<ArrayList<String>> tiles, String token) {
+        for (ArrayList<String> myTile : tiles) {
+            if (Board.getTilesToken(myTile).equalsIgnoreCase("0") && (myTile.get(1).contains(token) || myTile.get(2).contains(token))) {
+                return true;
+            }
         }
+        return false;
     }
 
-    public static int BotTokenYCoordinate() {
+    public static int BotTokenXCoordinate() {
         if (tileIndex != -1)
             return tileIndex % 10;
         else {
@@ -88,6 +93,15 @@ public class Bot {
         }
     }
 
+    public static int BotTokenYCoordinate() {
+        if (tileIndex != -1)
+            return tileIndex / 10;
+        else {
+            throw new IllegalArgumentException("No token can be placed");
+        }
+    }
+
+  
     public static String BotPlaceToken() {
         return "yes";
     }
@@ -95,7 +109,6 @@ public class Bot {
     
 
    public static char placeTileXCord(ArrayList<ArrayList<String>> boardOfTiles, ArrayList<String> tile){
-        placeTile(boardOfTiles, tile);
         char ans = Integer.toString(tileCord).charAt(1);
         System.out.println("The y cord is " +  ans);
         return ans;
