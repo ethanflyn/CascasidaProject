@@ -187,10 +187,18 @@ public class Board {
         }
         return choice2;
     }
+    
+    public boolean canPlace() {
+        for (ArrayList<String> myTile : myTiles) {
+            if (getTilesToken(myTile).equalsIgnoreCase("0") && (myTile.get(1).contains(chosenToken) || myTile.get(2).contains(chosenToken))) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void chooseToken() {
 
-        boolean canPlace = false;
         if (natureChoice == 1) {
             for (int i = 0; i < Token.presentTokens.size(); i++) {
                 System.out.print("     " + Token.presentTokens.get(i) + "\t\t\t");
@@ -206,12 +214,7 @@ public class Board {
             }
         }
         chosenToken = Token.presentTokens.get(selection-1);
-        for (ArrayList<String> myTile : myTiles) {
-            if (!getTilesToken(myTile).equalsIgnoreCase(chosenToken) && myTile.get(1).contains(chosenToken) || myTile.get(2).contains(chosenToken)) {
-                canPlace = true;
-                break;
-            }
-        }
+        
         if (canPlace) {
             String in;
             System.out.println("Do you want to place the token? " + chosenToken);
