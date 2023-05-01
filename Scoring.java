@@ -5,6 +5,56 @@ public class Scoring {
     public static ArrayList<ArrayList<String>> tiles;
     public static ArrayList<ArrayList<String>> bearTiles = new ArrayList<>();
     public static ArrayList<ArrayList<String>> salmonRun = new ArrayList<>();
+   
+    public static int currentMountainScore;
+    public static int currentForestScore;
+    public static int currentRiverScore;
+    public static int currentWetlandScore;
+    public static int currentPrarieScore;
+    
+    public static int getCurrentMountainScore() {
+        return currentMountainScore;
+    }
+
+    public static int getCurrentForestScore() {
+        return currentForestScore;
+    }
+
+    public static int getCurrentRiverScore() {
+        return currentRiverScore;
+    }
+
+    public static int getCurrentWetlandScore() {
+        return currentWetlandScore;
+    }
+
+    public static int getCurrentPrarieScore() {
+        return currentPrarieScore;
+    }
+    
+    public static void setCurrentMountainScore(int currentMountainScore) {
+        Scoring.currentMountainScore = currentMountainScore;
+    }
+
+    public static void setCurrentForestScore(int currentForestScore) {
+        Scoring.currentForestScore = currentForestScore;
+    }
+
+    public static void setCurrentRiverScore(int currentRiverScore) {
+        Scoring.currentRiverScore = currentRiverScore;
+    }
+
+    public static void setCurrentWetlandScore(int currentWetlandScore) {
+        Scoring.currentWetlandScore = currentWetlandScore;
+    }
+
+    public static void setCurrentPrarieScore(int currentPrarieScore) {
+        Scoring.currentPrarieScore = currentPrarieScore;
+    }
+
+    
+    
+    
     public static int scoring(ArrayList<ArrayList<String>> tiles) {
         int score=0;
         int bears = bearScoring(tiles);
