@@ -215,7 +215,7 @@ public class Board {
         }
         chosenToken = Token.presentTokens.get(selection-1);
         
-        if (canPlace) {
+        if (canPlace()) {
             String in;
             System.out.println("Do you want to place the token? " + chosenToken);
             if(GameIntro.currentPlayer.getName().equals("BOT")){
