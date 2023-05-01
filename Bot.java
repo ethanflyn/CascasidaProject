@@ -24,8 +24,6 @@ public class Bot {
       }
     
    public static int getBotToken(ArrayList<ArrayList<String>> tiles, int natureTokens) {
-        ArrayList<ArrayList<String>> tempTiles = tiles;
-        ArrayList<ArrayList<String>> tempTiles2 = tiles;
         int tempScore;
         maxScore = 0;
         int tempNature = natureTokens;
@@ -33,25 +31,28 @@ public class Bot {
         for (int i = 0; i < Token.presentTokens.size(); i++) {
             String tempToken = Token.presentTokens.get(i);
             // habitatBotPlace method
-            placeTile(tempTiles, Tile.presentTiles.get(i));
+            placeTile(tiles, Tile.presentTiles.get(i));
             System.out.println(tileCord + " tilecord");
-            tempTiles.set(tileCord, Tile.presentTiles.get(i));
-            for (int j = 0; j < tempTiles.size(); j++) {
+            tiles.set(tileCord, Tile.presentTiles.get(i));
+            for (int j = 0; j < tiles.size(); j++) {
+                boolean wasPlaced = false;
                 if (Board.getTilesToken(tiles.get(j)).equalsIgnoreCase("0") &&
-                        !tempTiles2.get(j).equals(Tile.EmptyTile) &&
+                        !tiles.get(j).equals(Tile.EmptyTile) &&
                         canPlace(tiles, tempToken) &&
-                        tempTiles2.get(j).get(1).contains(tempToken) ||
-                        tempTiles2.get(j).get(2).contains(tempToken)) {
+                        tiles.get(j).get(1).contains(tempToken) ||
+                        tiles.get(j).get(2).contains(tempToken)) {
 
-                    if (tempTiles2.get(j).get(1).contains(tempToken) && Board.getTilesToken(tiles.get(j)).equals("0")) {
-                        tempTiles2.get(j).set(1, tempTiles2.get(j).get(1).replace(tempToken, "\u001B[31m" + tempToken + "\u001B[0m"));
+                    if (tiles.get(j).get(1).contains(tempToken) && Board.getTilesToken(tiles.get(j)).equals("0")) {
+                        tiles.get(j).set(1, tiles.get(j).get(1).replace(tempToken, "\u001B[31m" + tempToken + "\u001B[0m"));
+                        wasPlaced = true;
                     }
 
-                    if (tempTiles2.get(j).get(2).contains(tempToken) && Board.getTilesToken(tiles.get(j)).equals("0")) {
-                        tempTiles2.get(j).set(2, tempTiles2.get(j).get(2).replace(tempToken, "\u001B[31m" + tempToken + "\u001B[0m"));
+                    if (tiles.get(j).get(2).contains(tempToken) && Board.getTilesToken(tiles.get(j)).equals("0")) {
+                        tiles.get(j).set(2, tiles.get(j).get(2).replace(tempToken, "\u001B[31m" + tempToken + "\u001B[0m"));
+                        wasPlaced = true;
                     }
 
-                    if (tempTiles2.get(j).get(1).contains("K") || tempTiles2.get(j).get(2).contains("K")) {
+                    if (tiles.get(j).get(1).contains("K") || tiles.get(j).get(2).contains("K")) {
                         tempNature++;
                     }
 
@@ -63,18 +64,18 @@ public class Bot {
                         bestTileCord = tileCord;
                     }
 
-                    if (tempTiles2.get(j).get(1).contains("\u001B[31m" + tempToken + "\u001B[0m")) {
-                        tempTiles2.get(j).set(1, tempTiles2.get(j).get(1).replace("\u001B[31m" + tempToken + "\u001B[0m", tempToken));
+                    if (tiles.get(j).get(1).contains("\u001B[31m" + tempToken + "\u001B[0m") && wasPlaced) {
+                        tiles.get(j).set(1, tiles.get(j).get(1).replace("\u001B[31m" + tempToken + "\u001B[0m", tempToken));
                     }
 
-                    if (tempTiles2.get(j).get(2).contains("\u001B[31m" + tempToken + "\u001B[0m")) {
-                        tempTiles2.get(j).set(2, tempTiles2.get(j).get(2).replace("\u001B[31m" + tempToken + "\u001B[0m", tempToken));
+                    if (tiles.get(j).get(2).contains("\u001B[31m" + tempToken + "\u001B[0m") && wasPlaced) {
+                        tiles.get(j).set(2, tiles.get(j).get(2).replace("\u001B[31m" + tempToken + "\u001B[0m", tempToken));
                     }
 
                     tempNature = natureTokens;
                 }
             }
-            tempTiles.set(tileCord, Tile.EmptyTile);
+            tiles.set(tileCord, Tile.EmptyTile);
         }
         System.out.println(tileIndex + " this");
         return presentTokenIndex+1;
@@ -105,7 +106,6 @@ public class Bot {
         }
     }
 
-  
     public static String BotPlaceToken() {
         return "yes";
     }
