@@ -173,10 +173,15 @@ public class Board {
                 choice = scanner1.nextLine();
             }
 
-            if (choice.equalsIgnoreCase("yes")) {
+             if (choice.equalsIgnoreCase("yes")) {
                 System.out.println("Enter 1 to choose any Token, Enter 2 to wipe any number of tokens");
-                Scanner scanner2 = new Scanner(System.in);
-                choice2 = scanner2.nextInt();
+                if (GameIntro.currentPlayer.getName().equals("BOT")) {
+                    choice2 = Bot.chooseNatureOption();
+                }
+                else{
+                    Scanner scanner2 = new Scanner(System.in);
+                    choice2 = scanner2.nextInt();
+                  }
                 natureTokens--;
             }
         }
