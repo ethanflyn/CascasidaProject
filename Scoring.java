@@ -335,94 +335,96 @@ public class Scoring {
 //        public static final String PRAIRIE_BAR = "\u001B[43m" + "\t\t\t" + "\u001B[0m";
 //    public static final String PRAIRIE_SIDE = "\u001B[43m" + "  " + "\u001B[0m";
 
-    public static int habitatScoring(ArrayList<ArrayList<String>> tiles) {
+     public static int habitatScoring(ArrayList<ArrayList<String>> tiles) {
         int prairieScore = 0;
         int mountainScore = 0;
         int wetlandScore = 0;
         int forestScore = 0;
         int riverScore = 0;
         int temp;
-//        ArrayList<String> prairieTile = new ArrayList<>();
-//        ArrayList<String> mountainTile = new ArrayList<>();
-//        ArrayList<String> wetlandTile = new ArrayList<>();
-//        ArrayList<String> forestTile = new ArrayList<>();
-//        ArrayList<String> riverTile  = new ArrayList<>();
-//
-//        prairieTile.add(TileColours.PRAIRIE_BAR);
-//        prairieTile.add(TileColours.PRAIRIE_SIDE + "        " + TileColours.PRAIRIE_SIDE);
-//        prairieTile.add(TileColours.PRAIRIE_SIDE + "        " + TileColours.PRAIRIE_SIDE);
-//        prairieTile.add(TileColours.PRAIRIE_BAR);
-//
-//        mountainTile.add(TileColours.MOUNTAIN_BAR);
-//        mountainTile.add(TileColours.MOUNTAIN_SIDE + "        " + TileColours.MOUNTAIN_SIDE);
-//        mountainTile.add(TileColours.MOUNTAIN_SIDE + "        " + TileColours.MOUNTAIN_SIDE);
-//        mountainTile.add(TileColours.MOUNTAIN_BAR);
-//
-//        wetlandTile.add(TileColours.WETLAND_BAR);
-//        wetlandTile.add(TileColours.WETLAND_SIDE + "        " + TileColours.WETLAND_SIDE);
-//        wetlandTile.add(TileColours.WETLAND_SIDE + "        " + TileColours.WETLAND_SIDE);
-//        wetlandTile.add(TileColours.WETLAND_BAR);
-//
-//        forestTile.add(TileColours.FOREST_BAR);
-//        forestTile.add(TileColours.FOREST_SIDE + "        " + TileColours.FOREST_SIDE);
-//        forestTile.add(TileColours.FOREST_SIDE + "        " + TileColours.FOREST_SIDE);
-//        forestTile.add(TileColours.FOREST_BAR);
-//
-//        riverTile.add(TileColours.RIVER_BAR);
-//        riverTile.add(TileColours.RIVER_SIDE + "        " + TileColours.RIVER_SIDE);
-//        riverTile.add(TileColours.RIVER_SIDE + "        " + TileColours.RIVER_SIDE);
-//        riverTile.add(TileColours.RIVER_BAR);
 
+        ArrayList<Integer> habitatRunIndexes = new ArrayList<>();
         for(int i = 0;i < tiles.size();i++)
         {
             if(tiles.get(i).get(0).equals(TileColours.PRAIRIE_BAR) || tiles.get(i).get(3).equals(TileColours.PRAIRIE_BAR)) {
-                temp  = tileSearch(tiles, TileColours.PRAIRIE_BAR, TileColours.PRAIRIE_SIDE, i, 0);
+                habitatRunIndexes.add(i);
+                temp  = tileSearch(tiles.get(i), tiles, TileColours.PRAIRIE_BAR, TileColours.PRAIRIE_SIDE, i, 0, habitatRunIndexes);
+                habitatRunIndexes.clear();
                 if(prairieScore < temp)  prairieScore = temp;
             }
             if(tiles.get(i).get(0).equals(TileColours.MOUNTAIN_BAR) || tiles.get(i).get(3).equals(TileColours.MOUNTAIN_BAR)){
-                temp = tileSearch(tiles, TileColours.MOUNTAIN_BAR,TileColours.MOUNTAIN_SIDE, i, 0);
+                habitatRunIndexes.add(i);
+                temp = tileSearch(tiles.get(i), tiles, TileColours.MOUNTAIN_BAR,TileColours.MOUNTAIN_SIDE, i, 0, habitatRunIndexes);
+                habitatRunIndexes.clear();
                 if(mountainScore < temp) mountainScore = temp;
             }
             if(tiles.get(i).get(0).equals(TileColours.WETLAND_BAR) || tiles.get(i).get(3).equals(TileColours.WETLAND_BAR)){
-                temp = tileSearch(tiles, TileColours.WETLAND_BAR,TileColours.WETLAND_SIDE,  i, 0);
+                habitatRunIndexes.add(i);
+                temp = tileSearch(tiles.get(i), tiles, TileColours.WETLAND_BAR,TileColours.WETLAND_SIDE,  i, 0, habitatRunIndexes);
+                habitatRunIndexes.clear();
                 if(wetlandScore < temp) wetlandScore = temp;
             }
             if(tiles.get(i).get(0).equals(TileColours.FOREST_BAR) || tiles.get(i).get(3).equals(TileColours.FOREST_BAR)){
-                temp = tileSearch(tiles, TileColours.FOREST_BAR, TileColours.FOREST_SIDE, i, 0);
+                habitatRunIndexes.add(i);
+                temp = tileSearch(tiles.get(i), tiles, TileColours.FOREST_BAR, TileColours.FOREST_SIDE, i, 0, habitatRunIndexes);
+                habitatRunIndexes.clear();
                 if(forestScore < temp) forestScore = temp;
             }
             if(tiles.get(i).get(0).equals(TileColours.RIVER_BAR) || tiles.get(i).get(3).equals(TileColours.RIVER_BAR)){
-                temp = tileSearch(tiles, TileColours.RIVER_BAR, TileColours.RIVER_SIDE, i, 0);
+                habitatRunIndexes.add(i);
+                temp = tileSearch(tiles.get(i), tiles, TileColours.RIVER_BAR, TileColours.RIVER_SIDE, i, 0, habitatRunIndexes);
+                habitatRunIndexes.clear();
                 if(riverScore < temp) riverScore = temp;
             }
         }
+        setCurrentForestScore(forestScore);
+        setCurrentMountainScore(mountainScore);
+        setCurrentRiverScore(riverScore);
+        setCurrentWetlandScore(wetlandScore);
+        setCurrentPrarieScore(prairieScore);
 
 
         return mountainScore + forestScore + riverScore + wetlandScore + prairieScore;
     }
 
-    public static int tileSearch(ArrayList<ArrayList<String>> tiles, String bar, String side, int index, int score){
+    public static int tileSearch( ArrayList<String> currentTile, ArrayList<ArrayList<String>> tiles, String bar, String side, int index, int score, ArrayList<Integer> habitatRunIndexes){
         if(index < 0 || index > 100){
-            return score;
+            return score + 1;
         }
         int right = 0;
         int left = 0;
         int up = 0;
         int down = 0;
-        if(tiles.get(index++).get(0).equals(bar) || tiles.get(index++).get(3).equals(bar))  {
-             right = tileSearch(tiles,bar,side, index + 1, score + 1);
+        boolean topBar = false, bottomBar = false;
+        if(currentTile.get(0).equals(bar)) topBar = true;
+        if(currentTile.get(3).equals(bar)) bottomBar = true;
+
+        if(tiles.get(index + 1).get(0).equals(currentTile.get(0)) && topBar && !habitatRunIndexes.contains(index + 1)){
+            habitatRunIndexes.add(index + 1);
+            right = tileSearch(tiles.get(index + 1),tiles,bar,side, index + 1, score + 1, habitatRunIndexes);
         }
-        else if(tiles.get(index--).get(0).equals(bar) || tiles.get(index--).get(3).equals(bar)){
-            left = tileSearch(tiles,bar, side, index - 1, score + 1);
+        else if(tiles.get(index + 1).get(3).equals(currentTile.get(3)) && bottomBar && !habitatRunIndexes.contains(index + 1)){
+            habitatRunIndexes.add(index + 1);
+            right = tileSearch(tiles.get(index + 1),tiles,bar,side, index + 1, score + 1, habitatRunIndexes);
         }
-        else if(tiles.get(index + 10).get(0).equals(bar)){
-            up = tileSearch(tiles,bar, side, index + 10, score + 1);
+        else if(tiles.get(index - 1).get(0).equals(currentTile.get(0)) && topBar && !habitatRunIndexes.contains(index - 1)){
+            habitatRunIndexes.add(index - 1);
+            left = tileSearch(tiles.get(index -1 ),tiles,bar, side, index - 1, score + 1, habitatRunIndexes);
         }
-        else if(tiles.get(index - 10).get(3).equals(bar)){
-           down = tileSearch(tiles,bar, side, index - 10, score + 1);
+        else if(tiles.get(index - 1).get(3).equals(currentTile.get(3)) && bottomBar && !habitatRunIndexes.contains(index - 1)){
+            habitatRunIndexes.add(index - 1);
+            left = tileSearch(tiles.get(index -1),tiles,bar, side, index - 1, score + 1, habitatRunIndexes);
+        }
+        else if(tiles.get(index + 10).get(0).equals(currentTile.get(3)) && bottomBar && !habitatRunIndexes.contains(index + 10)){
+            habitatRunIndexes.add(index + 10);
+            up = tileSearch(tiles.get(index + 10), tiles,bar, side, index + 10, score + 1, habitatRunIndexes);
+        }
+        else if(tiles.get(index - 10).get(3).equals(currentTile.get(0)) && topBar &&  !habitatRunIndexes.contains(index - 10)){
+            habitatRunIndexes.add(index - 10);
+           down = tileSearch(tiles.get(index - 10),tiles,bar, side, index - 10, score + 1, habitatRunIndexes);
         }
         else{
-            return score;
+            return score + 1;
         }
         int first = Math.max(left,right);
         int last = Math.max(up,down);
