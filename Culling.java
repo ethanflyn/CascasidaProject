@@ -20,8 +20,14 @@ public class Culling {
         int i=0;
         if (x == 3 || y == 3) {
             System.out.println("Three of the tokens are the same, if you wish to cull enter 'yes'. If not enter 'no'");
-            Scanner scanner = new Scanner(System.in);
-            String userChoice = scanner.nextLine();
+            if (GameIntro.currentPlayer.getName().equals("BOT")) {
+                userChoice = Bot.culling();
+                System.out.println(userChoice);
+            }
+            else{
+                Scanner scanner = new Scanner(System.in);
+                userChoice = scanner.nextLine();
+            }
             if (userChoice.equalsIgnoreCase("yes")) {
                 if (x == 3) {
                     while (i < Token.presentTokens.size()) {
