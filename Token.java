@@ -2,8 +2,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Token {
-
+    // Bag of all usable wildlife Tokens
     public static ArrayList<String> wildlifeTokens = new ArrayList<>();
+    // 4 playable tokens
     public static ArrayList<String> presentTokens = new ArrayList<>();
     public static void generateTokens() {
         String Fox = "F";
@@ -34,7 +35,6 @@ public class Token {
         }
         System.out.println();
         Culling.cullRequired();
-
     }
 
     public static void replaceToken(int index) {
@@ -47,4 +47,3 @@ public class Token {
 
 
 }
-
