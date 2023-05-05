@@ -1,30 +1,16 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
-import java.util.SimpleTimeZone;
 
 public class Bot {
-    static boolean shouldCull = false;
     static int tileIndex = -1;
     static int tileCord;
     static int maxScore;
     static int presentTokenIndex = 0;
     static int bestTileCord;
     static int natureTokenChoice;
-    static int botWildlifeNature = -1; // picks which token to place after spending nature token
     static ArrayList<Integer> placedIndexes = new ArrayList<>();
-
-     
-      public static String rotateTile(){
-        Random rand = new Random();
-        int ans = rand.nextInt(100000) % 2;
-        return switch (ans) {
-            case 0 -> "yes";
-            case 1 -> "no";
-            default -> null;
-        };
-      }
-    
-  
+    static int botWildlifeNature = -1; // picks which token to place after spending nature token
     public static int getBotToken(ArrayList<ArrayList<String>> tiles, int natureTokens) {
         int tempScore;
         maxScore = 0;
@@ -110,14 +96,13 @@ public class Bot {
     }
 
     public static String BotPlaceToken() {
+        System.out.println("yes");
         return "yes";
     }
-    
-    
 
-   public static char placeTileXCord(ArrayList<ArrayList<String>> boardOfTiles, ArrayList<String> tile){
+    public static char placeTileXCord(ArrayList<ArrayList<String>> boardOfTiles, ArrayList<String> tile){
         char ans = Integer.toString(bestTileCord).charAt(1);
-        System.out.println("The x cord is " +  ans);
+        System.out.println(ans);
         return ans;
     }
 
@@ -125,13 +110,14 @@ public class Bot {
     public static char placeTileYCord(ArrayList<ArrayList<String>> boardOfTiles,  ArrayList<String> tile){
         if (bestTileCord < 10) return '0';
         else{
-           char ans = Integer.toString(bestTileCord).charAt(0);
-            System.out.println("The y cord is " +  ans);
-           return ans;
-       }
+            char ans = Integer.toString(bestTileCord).charAt(0);
+            System.out.println(ans);
+            return ans;
+        }
     }
 
-       public static void placeTile(ArrayList<ArrayList<String>> boardOfTiles, ArrayList<String> tile){
+
+    public static void placeTile(ArrayList<ArrayList<String>> boardOfTiles, ArrayList<String> tile){
 
         ArrayList<Integer> tileIndexes = new ArrayList<>();
 
@@ -162,21 +148,38 @@ public class Bot {
             }
         }
     }
-    
 
     public static int botScoring(ArrayList<ArrayList<String>> tiles, int natureTokens) {
         int score = 0;
         score += Scoring.bearScoring(tiles);
+        Scoring.bearTiles.clear();
         score += Scoring.hawkScoring(tiles);
         score += Scoring.foxScoring(tiles);
         score += Scoring.elkScoring(tiles);
+        Scoring.elkRun.clear();
         score += Scoring.salmonScoring(tiles);
+        Scoring.salmonRun.clear();
         score += natureTokens;
         return score;
     }
 
+    public static String rotateTile(){
+        Random rand = new Random();
+        int ans = rand.nextInt(100000) % 2;
+        switch (ans) {
+            case 0 -> {
+                System.out.println("yes");
+                return "yes";
+            }
+            case 1 -> {
+                System.out.println("no");
+                return "no";
+            }
+            default -> throw new IllegalArgumentException("invalid state");
+        }
+    }
 
-         public static int chooseNatureOption(){
+    public static int chooseNatureOption(){
         for(int i = 0;i < GameIntro.currentPlayer.getBoard().myTiles.size();i++){
             for (int j = 0;j < GameIntro.currentPlayer.getBoard().myTiles.get(i).size();j++){
                 for(int k = 0; k< GameIntro.currentPlayer.getBoard().myTiles.get(i).get(j).toCharArray().length;k++){
@@ -201,50 +204,47 @@ public class Bot {
         }
         return 2;
     }
-     public static String culling(){
+    public static String culling() {
         ArrayList<String> tokens = Token.presentTokens;
         ArrayList<ArrayList<String>> playerTiles = GameIntro.currentPlayer.getBoard().myTiles;
         boolean tokenCheck = false;
 
-        for(int i = 0;i < playerTiles.size();i++){
-            for(int j = 0;j <playerTiles.get(i).size();j++){
-                for(int k = 0;k < playerTiles.get(i).get(j).toCharArray().length;k++){
-                    if(playerTiles.get(i).get(j).charAt(k) == tokens.get(0).charAt(0) && !placedIndexes.contains(i)){
+        for (int i = 0; i < playerTiles.size(); i++) {
+            for (int j = 0; j < playerTiles.get(i).size(); j++) {
+                for (int k = 0; k < playerTiles.get(i).get(j).toCharArray().length; k++) {
+                    if (playerTiles.get(i).get(j).charAt(k) == tokens.get(0).charAt(0) && !placedIndexes.contains(i)) {
                         tokenCheck = true;
                         break;
                     }
-                    if(playerTiles.get(i).get(j).charAt(k) == tokens.get(1).charAt(0) && !placedIndexes.contains(i)){
+                    if (playerTiles.get(i).get(j).charAt(k) == tokens.get(1).charAt(0) && !placedIndexes.contains(i)) {
                         tokenCheck = true;
                         break;
                     }
-                    if(playerTiles.get(i).get(j).charAt(k) == tokens.get(2).charAt(0) && !placedIndexes.contains(i)){
+                    if (playerTiles.get(i).get(j).charAt(k) == tokens.get(2).charAt(0) && !placedIndexes.contains(i)) {
                         tokenCheck = true;
                         break;
                     }
-                    if(playerTiles.get(i).get(j).charAt(k) == tokens.get(3).charAt(0) && !placedIndexes.contains(i)){
+                    if (playerTiles.get(i).get(j).charAt(k) == tokens.get(3).charAt(0) && !placedIndexes.contains(i)) {
                         tokenCheck = true;
                         break;
                     }
                 }
             }
         }
-          
-        if(tokenCheck){
+
+        if (tokenCheck) {
             return "no";
-        }
-        else{
+        } else {
             return "yes";
         }
-
     }
+
     public static String spendNature(){
         return "yes";
-
     }
     public static int replaceTokens(){
         Random rand = new Random();
         return rand.nextInt(10000) % 5;
     }
-
 
 }
