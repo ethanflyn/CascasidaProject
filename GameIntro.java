@@ -45,8 +45,10 @@ public class GameIntro {
         System.out.println("CASCADIA VS BOT\nPlease enter your name");
         User tempUser = new User(scanner.nextLine());
         users.add(tempUser);
+
         User theBot = new User("BOT");
         users.add(theBot);
+
         System.out.println("You will play in the following order:\n");
         Collections.shuffle(users);
         for (int i = 0; i < 2; i++) {
@@ -124,7 +126,7 @@ public class GameIntro {
         Tile.habitatArray();
         Tile.wildlifeArray();
         GameIntro g = new GameIntro();
-        g.getUsers();
+        g.playBot();
         g.endGame();
 
     }
