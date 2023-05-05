@@ -246,9 +246,5 @@ public class Bot {
         return rand.nextInt(10000) % 5;
     }
 
-    public static String askedToPlaceTokens(){
-          return "yes";
-    }
-  }
 
 }
