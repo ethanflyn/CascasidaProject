@@ -128,70 +128,34 @@ public class Bot {
        }
     }
 
-       public static void placeTile(ArrayList<ArrayList<String>> boardOfTiles, ArrayList<String> tile) {
-
-
-        String topBar = tile.get(0);
-//        char leftSide = tile.get(1).charAt(0);
-//        char rightSide = tile.get(1).charAt(tile.get(1).length());
-        String bottomBar = tile.get(3);
+       public static void placeTile(ArrayList<ArrayList<String>> boardOfTiles, ArrayList<String> tile){
 
         ArrayList<Integer> tileIndexes = new ArrayList<>();
 
-
-        for (int j = 0; j < boardOfTiles.size(); j++) {
-            if (!boardOfTiles.get(j).get(0).equals(TileColours.EMPTY_TILE_BAR)) {
+        for(int j = 0;j < boardOfTiles.size();j++){
+            if(!boardOfTiles.get(j).get(0).equals(TileColours.EMPTY_TILE_BAR)) {
                 tileIndexes.add(j);
             }
             Collections.shuffle(tileIndexes);
         }
-//        System.out.println(tileIndexes);
         int i = 0;
-        // CHECK BOTH BARS AND UNDERNEATH AND ABOVE AND CHECK WHAT THE SCORING IS FOR THE CURRENT PLACEMENT // ALSO TWO HABITATS
-        while (true) {
-            if (i == tileIndexes.size()) break;
-            else if ((boardOfTiles.get(tileIndexes.get(i)).get(0).equals(tile.get(0))) && (tileIndexes.get(i) + 1) % 10 != 9) {
+
+        while(true) {
+            if (boardOfTiles.get(tileIndexes.get(i) + 1).get(0).equals(TileColours.EMPTY_TILE_BAR)) {
                 tileCord = tileIndexes.get(i) + 1;
                 break;
-            } else if (boardOfTiles.get(tileIndexes.get(i)).get(3).equals(tile.get(3)) && (tileIndexes.get(i) + 1) % 10 != 9) {
-                tileCord = tileIndexes.get(i) + 1;
-                break;
-            } else if (boardOfTiles.get(tileIndexes.get(i)).get(0).equals(tile.get(0)) && (tileIndexes.get(i) - 1) % 10 != 0) {
+            } else if (boardOfTiles.get(tileIndexes.get(i) - 1).get(0).equals(TileColours.EMPTY_TILE_BAR)) {
                 tileCord = tileIndexes.get(i) - 1;
                 break;
-            } else if (boardOfTiles.get(tileIndexes.get(i)).get(3).equals(tile.get(3)) && (tileIndexes.get(i) - 1) % 10 != 0) {
-                tileCord = tileIndexes.get(i) - 1;
-                break;
-            } else if (boardOfTiles.get(tileIndexes.get(i)).get(0).equals(tile.get(3)) && (tileIndexes.get(i) + 10) < 100) {
+            } else if (boardOfTiles.get(tileIndexes.get(i) + 10).get(0).equals(TileColours.EMPTY_TILE_BAR)) {
                 tileCord = tileIndexes.get(i) + 10;
                 break;
-            } else if (boardOfTiles.get(tileIndexes.get(i)).get(3).equals(tile.get(0)) && (tileIndexes.get(i) + 10) > 10) {
+            } else if (boardOfTiles.get(tileIndexes.get(i) - 10).get(0).equals(TileColours.EMPTY_TILE_BAR)) {
                 tileCord = tileIndexes.get(i) - 10;
                 break;
-            } else {
-                i++;
             }
-        }
-
-        if (i == tileIndexes.size()) {
-            i = 0;
-            while (true) {
-
-                if (boardOfTiles.get(tileIndexes.get(i) + 1).get(0).equals(TileColours.EMPTY_TILE_BAR)) {
-                    tileCord = tileIndexes.get(i) + 1;
-                    break;
-                } else if (boardOfTiles.get(tileIndexes.get(i) - 1).get(0).equals(TileColours.EMPTY_TILE_BAR)) {
-                    tileCord = tileIndexes.get(i) - 1;
-                    break;
-                } else if (boardOfTiles.get(tileIndexes.get(i) + 10).get(0).equals(TileColours.EMPTY_TILE_BAR)) {
-                    tileCord = tileIndexes.get(i) + 10;
-                    break;
-                } else if (boardOfTiles.get(tileIndexes.get(i) - 10).get(0).equals(TileColours.EMPTY_TILE_BAR)) {
-                    tileCord = tileIndexes.get(i) - 10;
-                    break;
-                } else {
-                    i++;
-                }
+            else{
+                i++;
             }
         }
     }
@@ -208,14 +172,7 @@ public class Bot {
         return score;
     }
 
- 
 
-//     public static int botNatureTokens(int natureTokens) {
-//         if (natureTokens > 0 && shouldCull) {
-//             return 2;
-//         }
-//         return 0;
-//     }
          public static int chooseNatureOption(){
         for(int i = 0;i < GameIntro.currentPlayer.getBoard().myTiles.size();i++){
             for (int j = 0;j < GameIntro.currentPlayer.getBoard().myTiles.get(i).size();j++){
