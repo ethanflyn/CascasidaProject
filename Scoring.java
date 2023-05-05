@@ -1,17 +1,15 @@
 import java.util.ArrayList;
 public class Scoring {
-    private int position;
-
-    public static ArrayList<ArrayList<String>> tiles;
     public static ArrayList<ArrayList<String>> bearTiles = new ArrayList<>();
     public static ArrayList<ArrayList<String>> salmonRun = new ArrayList<>();
-   
+    public static ArrayList<ArrayList<String>> elkRun = new ArrayList<>();
+
     public static int currentMountainScore;
     public static int currentForestScore;
     public static int currentRiverScore;
     public static int currentWetlandScore;
     public static int currentPrarieScore;
-    
+
     public static int getCurrentMountainScore() {
         return currentMountainScore;
     }
@@ -31,7 +29,7 @@ public class Scoring {
     public static int getCurrentPrarieScore() {
         return currentPrarieScore;
     }
-    
+
     public static void setCurrentMountainScore(int currentMountainScore) {
         Scoring.currentMountainScore = currentMountainScore;
     }
@@ -52,29 +50,58 @@ public class Scoring {
         Scoring.currentPrarieScore = currentPrarieScore;
     }
 
-    
-    
-    
+
+    /**
+     * method will take all the player's placed tiles and perform
+     * all the scoring methods on it for each wildlife
+     * the results will be added and returned as the final score
+     *
+     * @param tiles 2D array on which to perform scoring methods
+     * @return the final score from all the wildlife scoring methods
+     */
+
     public static int scoring(ArrayList<ArrayList<String>> tiles) {
         int score=0;
+
         int bears = bearScoring(tiles);
+        bearTiles.clear();
         score += bears;
         System.out.println("You scored " + bears + " points from bear tiles");
-        score += hawkScoring(tiles);
-        System.out.println("You scored " + hawkScoring(tiles) + " points from hawk tiles");
-        score += foxScoring(tiles);
-        System.out.println("You scored " + foxScoring(tiles) + " points from fox tiles");
-        score += elkScoring(tiles);
+
+        int hawks = hawkScoring(tiles);
+        score += hawks;
+        System.out.println("You scored " + hawks + " points from hawk tiles");
+
+        int foxes = foxScoring(tiles);
+        score += foxes;
+        System.out.println("You scored " + foxes + " points from fox tiles");
+
+        int elk = elkScoring(tiles);
+        elkRun.clear();
+        score += elk;
         System.out.println("You scored " + elkScoring(tiles) + " points from elk tiles");
+
         int salmon = salmonScoring(tiles);
+        salmonRun.clear();
         score += salmon;
         System.out.println("You scored " + salmon + " points from salmon tiles");
+
         System.out.println("You're total score from wildlife tokens is " + score);
+
         System.out.println("Your total score from habitat placement is " + habitatScoring(tiles));
         score += habitatScoring(tiles);
+
         return score;
     }
 
+    /**
+     * method to check 2D for pairs of bears
+     * if more than one bear is adjacent to the specified index return 0
+     *
+     * @param tiles 2D array as input to perform the checkBears method on
+     * @param i index of the 2D array to check for bear pairs
+     * @return if only connected to one other bear, return the index of the connected bear
+     */
     public static int checkBears(ArrayList<ArrayList<String>> tiles, int i) {
         int bearCount = 0;
         int position = 0;
@@ -104,6 +131,13 @@ public class Scoring {
 
         return 0;
     }
+
+    /** method to score bear pairs in the 2D array
+     * Uses the checkBears method to help find and count bear pairs in the array
+     *
+     * @param tiles 2D array on which to score for bears
+     * @return score for bear pairs in the tile 2D array
+     */
 
     public static int bearScoring(ArrayList<ArrayList<String>> tiles) {
         int bearPairs=0;
@@ -135,6 +169,15 @@ public class Scoring {
         return score;
     }
 
+    /**
+     * method to check the surrounding tokens of a fox token
+     * and find the number of unique tokens
+     *
+     * @param tiles 2D array on which to score for foxes
+     * @param i index of the 2D array to check for foxes
+     * @return the number of unique tokens surrounding the fox token
+     */
+
     public static int checkFoxes(ArrayList<ArrayList<String>> tiles, int i) {
 
         if (Board.getTilesToken(tiles.get(i)).equalsIgnoreCase("F")) {
@@ -143,7 +186,7 @@ public class Scoring {
 
             if (i - 10 >= 0)
                 surround.add(tiles.get(i - 10));
-            if (i + 10 < 0)
+            if (i + 10 < 100)
                 surround.add(tiles.get(i + 10));
             if ((i - 1) % 9 != 0 && (i - 1) > 0)
                 surround.add(tiles.get(i - 1));
@@ -169,6 +212,12 @@ public class Scoring {
         return 0;
     }
 
+    /**
+     * method to find the total score from fox tokens in the 2D array
+     *
+     * @param tiles 2D array on which to score for foxes
+     * @return score for fox tokens in given 2D array
+     */
     public static int foxScoring(ArrayList<ArrayList<String>> tiles) {
         int score=0;
         for (int i = 0; i < tiles.size(); i++) {
@@ -178,27 +227,39 @@ public class Scoring {
         return score;
     }
 
+    /**
+     * method to check for straight lines of elk in the 2D array
+     * Checks for both horizontal and vertical lines of elk and return the max
+     * @param tiles 2D array on which to score for elk
+     * @param i index of the 2D array to check for elk
+     * @return max length of elk run
+     */
     public static int checkElk(ArrayList<ArrayList<String>> tiles, int i) {
         int maxElk1=1;
         int maxElk2=1;
         int input = i;
-        if (Board.getTilesToken(tiles.get(i)).equalsIgnoreCase("E")) {
-            while ((input+1) % 10 != 0 && (input+1) < 100 && Board.getTilesToken(tiles.get(input+1)).equalsIgnoreCase("E") ) {
+        if (Board.getTilesToken(tiles.get(i)).equalsIgnoreCase("E") && !elkRun.contains(tiles.get(i))) {
+            elkRun.add(tiles.get(i));
+            while ((input+1) % 10 != 0 && (input+1) < 100 && Board.getTilesToken(tiles.get(input+1)).equalsIgnoreCase("E") && !elkRun.contains(tiles.get(input+1)) ) {
+                elkRun.add(tiles.get(input+1));
                 maxElk1++;
                 input++;
             }
             input = i;
-            while ((input-1) % 9 != 0 && (input-1) >= 0 && Board.getTilesToken(tiles.get(input-1)).equalsIgnoreCase("E")) {
+            while ((input-1) % 9 != 0 && (input-1) >= 0 && Board.getTilesToken(tiles.get(input-1)).equalsIgnoreCase("E") && !elkRun.contains(tiles.get(input-1))) {
+                elkRun.add(tiles.get(input-1));
                 maxElk1++;
                 input--;
             }
             input = i;
-            while (input+10 < 100 && Board.getTilesToken(tiles.get(input+10)).equalsIgnoreCase("E")) {
+            while (input+10 < 100 && Board.getTilesToken(tiles.get(input+10)).equalsIgnoreCase("E") && !elkRun.contains(tiles.get(input+10))) {
+                elkRun.add(tiles.get(input+10));
                 maxElk2++;
                 input += 10;
             }
             input = i;
-            while (input-10 >= 0 && Board.getTilesToken(tiles.get(input-10)).equalsIgnoreCase("E")) {
+            while (input-10 >= 0 && Board.getTilesToken(tiles.get(input-10)).equalsIgnoreCase("E") && !elkRun.contains(tiles.get(input-10))) {
+                elkRun.add(tiles.get(input-10));
                 maxElk2++;
                 input -= 10;
             }
@@ -207,34 +268,43 @@ public class Scoring {
         return 0;
     }
 
+    /**
+     * method to calculate total score from elk tiles in the 2D array
+     * @param tiles 2D array on which to score for elk
+     * @return total score for elk tiles in the array
+     */
     public static int elkScoring(ArrayList<ArrayList<String>> tiles) {
-        int elk=0;
         int score=0;
         for (int i = 0; i < tiles.size(); i++) {
-            if (checkElk(tiles, i) != 0) {
-                switch (checkElk(tiles, i)) {
-                    case 1:
-                        score += 2;
-                        break;
-                    case 2:
-                        score += 5;
-                        break;
-                    case 3:
-                        score += 9;
-                        break;
-                    case 4:
-                    case 5:
-                    case 6:
-                        score += 13;
-                        break;
-                    default:
-                        break;
-                }
+            switch (checkElk(tiles, i)) {
+                case 1:
+                    score += 2;
+                    break;
+                case 2:
+                    score += 5;
+                    break;
+                case 3:
+                    score += 9;
+                    break;
+                case 4:
+                case 5:
+                case 6:
+                    score += 13;
+                    break;
+                default:
+                    break;
             }
         }
         return score;
     }
 
+    /**
+     * method to check for hawk tokens in the given 2D array
+     * If any other hawks are adjacent 0 points are scored
+     * @param tiles 2D array on which to score for hawks
+     * @param i index of the 2D array to check for hawks
+     * @return 1 point if it is a lone hawk
+     */
     public static int checkHawks(ArrayList<ArrayList<String>> tiles, int i) {
         int hawkCount=0;
 
@@ -261,6 +331,11 @@ public class Scoring {
         return hawkCount;
     }
 
+    /**
+     * method to calculate total score for hawk tokens in the array
+     * @param tiles 2D array on which to score for hawks
+     * @return total score for hawks in the given array
+     */
     public static int hawkScoring(ArrayList<ArrayList<String>> tiles) {
         int hawks=0;
         int score=0;
@@ -297,6 +372,13 @@ public class Scoring {
         return score;
     }
 
+    /**
+     * method to check for salmon runs in the given 2D array
+     * recursively checks for adjacent salmon, adding 1 to the run each time it is called
+     * @param tiles 2D array on which to score for salmon
+     * @param i index of the 2D array to check for salmon
+     * @return the total number of salmon in the run
+     */
     public static int checkSalmon(ArrayList<ArrayList<String>> tiles, int i) {
         int salmonCount = 0;
         int position=0;
@@ -348,6 +430,11 @@ public class Scoring {
         return 0;
     }
 
+    /**
+     * calculates total score for salmon on given array
+     * @param tiles 2D array on which to score for salmon
+     * @return total score for salmon tokens
+     */
     public static int salmonScoring(ArrayList<ArrayList<String>> tiles) {
         int score=0;
         for (int i = 0; i < tiles.size(); i++) {
@@ -382,10 +469,8 @@ public class Scoring {
         }
         return score;
     }
-//        public static final String PRAIRIE_BAR = "\u001B[43m" + "\t\t\t" + "\u001B[0m";
-//    public static final String PRAIRIE_SIDE = "\u001B[43m" + "  " + "\u001B[0m";
 
-     public static int habitatScoring(ArrayList<ArrayList<String>> tiles) {
+    public static int habitatScoring(ArrayList<ArrayList<String>> tiles) {
         int prairieScore = 0;
         int mountainScore = 0;
         int wetlandScore = 0;
@@ -471,7 +556,7 @@ public class Scoring {
         }
         else if(tiles.get(index - 10).get(3).equals(currentTile.get(0)) && topBar &&  !habitatRunIndexes.contains(index - 10)){
             habitatRunIndexes.add(index - 10);
-           down = tileSearch(tiles.get(index - 10),tiles,bar, side, index - 10, score + 1, habitatRunIndexes);
+            down = tileSearch(tiles.get(index - 10),tiles,bar, side, index - 10, score + 1, habitatRunIndexes);
         }
         else{
             return score + 1;
@@ -479,7 +564,7 @@ public class Scoring {
         int first = Math.max(left,right);
         int last = Math.max(up,down);
 
-            return Math.max(first,last);
+        return Math.max(first,last);
 
     }
 }
