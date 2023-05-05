@@ -10,6 +10,7 @@ public class Bot {
     static int presentTokenIndex = 0;
     static int bestTileCord;
     static int natureTokenChoice;
+    static int botWildlifeNature = -1; // picks which token to place after spending nature token
     static ArrayList<Integer> placedIndexes = new ArrayList<>();
 
      
@@ -23,7 +24,8 @@ public class Bot {
         };
       }
     
-   public static int getBotToken(ArrayList<ArrayList<String>> tiles, int natureTokens) {
+  
+    public static int getBotToken(ArrayList<ArrayList<String>> tiles, int natureTokens) {
         int tempScore;
         maxScore = 0;
         int tempNature = natureTokens;
@@ -32,7 +34,6 @@ public class Bot {
             String tempToken = Token.presentTokens.get(i);
             // habitatBotPlace method
             placeTile(tiles, Tile.presentTiles.get(i));
-            System.out.println(tileCord + " tilecord");
             tiles.set(tileCord, Tile.presentTiles.get(i));
             for (int j = 0; j < tiles.size(); j++) {
                 boolean wasPlaced = false;
@@ -77,7 +78,9 @@ public class Bot {
             }
             tiles.set(tileCord, Tile.EmptyTile);
         }
-        System.out.println(tileIndex + " this");
+
+        botWildlifeNature = presentTokenIndex+1;
+        System.out.println(presentTokenIndex+1);
         return presentTokenIndex+1;
     }
 
