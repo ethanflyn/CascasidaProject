@@ -19,6 +19,7 @@ public class Culling {
         }
         int i=0;
         if (x == 3 || y == 3) {
+            String userChoice;
             System.out.println("Three of the tokens are the same, if you wish to cull enter 'yes'. If not enter 'no'");
             if (GameIntro.currentPlayer.getName().equals("BOT")) {
                 userChoice = Bot.culling();
@@ -28,6 +29,7 @@ public class Culling {
                 Scanner scanner = new Scanner(System.in);
                 userChoice = scanner.nextLine();
             }
+
             if (userChoice.equalsIgnoreCase("yes")) {
                 if (x == 3) {
                     while (i < Token.presentTokens.size()) {
@@ -50,7 +52,7 @@ public class Culling {
                     System.out.print("\t\t\t\t\t\t");
                     for (int j = 0; j < 4; j++) {
                         System.out.print(Tile.presentTiles.get(j).get(i));
-                        System.out.print("			");
+                        System.out.print("\t");
                     }
                     System.out.println();
                 }
@@ -74,7 +76,7 @@ public class Culling {
                 System.out.print("\t\t\t\t\t\t");
                 for (int j = 0; j < 4; j++) {
                     System.out.print(Tile.presentTiles.get(j).get(i));
-                    System.out.print("			");
+                    System.out.print("\t");
                 }
                 System.out.println();
             }
